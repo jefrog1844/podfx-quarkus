@@ -1,20 +1,17 @@
 package com.jcr.podfx.business.dfmeas.entity;
 
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.json.bind.annotation.JsonbTransient;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+
 import com.jcr.podfx.business.PodfxEntity;
 import com.jcr.podfx.business.blocks.entity.Block;
 import com.jcr.podfx.business.factors.entity.Factor;
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import javax.json.bind.annotation.JsonbTransient;
-import javax.persistence.CascadeType;
-
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.ws.rs.NotFoundException;
 
 @Entity
 public class Dfmea extends PodfxEntity {
@@ -46,8 +43,25 @@ public class Dfmea extends PodfxEntity {
         
     }
     
-    public Dfmea(DfmeaDetail detail) {
-        update(detail);
+    
+    public Dfmea(String id, DfmeaDetail detail) {
+        this.id = id;
+    	update(detail);
+    }
+    
+    public void addBlock(Block block) {
+    	blocks.add(block);
+    	block.setDfmea(this);
+    }
+    
+    public void addFactor(Factor factor) {
+    	factors.add(factor);
+    	factor.setDfmea(this);
+    }
+    
+    public void removeFactor(Factor factor) {
+    	factors.remove(factor);
+    	factor.setDfmea(null);
     }
     
     @JsonbTransient

@@ -1,12 +1,12 @@
 package com.jcr.podfx.business.factors.entity;
 
-import com.jcr.podfx.business.PodfxEntity;
-import com.jcr.podfx.business.dfmeas.entity.Dfmea;
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.jcr.podfx.business.PodfxEntity;
+import com.jcr.podfx.business.dfmeas.entity.Dfmea;
 
 @Entity
 public class Factor extends PodfxEntity {
@@ -38,18 +38,11 @@ public class Factor extends PodfxEntity {
         
     }
     
-    public Factor(FactorDetail detail) {
-        this.type = detail.getType();
-        this.name = detail.getName();
-        this.category = detail.getCategory();
-        this.dfmea = null;
-    }
-    
-    public Factor(String type, String name, String category, Dfmea dfmea) {
-        this.type = type;
+    public Factor(String id, String type, String name, String category) {
+        this.id = id;
+    	this.type = type;
         this.name = name;
         this.category = category;
-        this.dfmea = dfmea;
     }
     
     public Dfmea getDfmea() {
@@ -67,10 +60,5 @@ public class Factor extends PodfxEntity {
     public boolean isExternal() {
         return !isInternal();
     }
-    
-    public void update(FactorDetail input) {
-        this.name = input.getName();
-        this.type = input.getType();
-        this.category = input.getCategory();
-    }
+
 }

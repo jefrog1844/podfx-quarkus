@@ -1,12 +1,12 @@
 package com.jcr.podfx.business.interfaces.entity;
 
-import com.jcr.podfx.business.PodfxEntity;
-import com.jcr.podfx.business.factors.entity.Factor;
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.jcr.podfx.business.PodfxEntity;
+import com.jcr.podfx.business.factors.entity.Factor;
 
 @Entity
 public class Interface extends PodfxEntity {
@@ -34,8 +34,9 @@ public class Interface extends PodfxEntity {
         
     }
     
-    public Interface(Factor inputFactor, Factor outputFactor, boolean enabled) {
-        this.inputFactor = inputFactor;
+    public Interface(String id, Factor inputFactor, Factor outputFactor, boolean enabled) {
+        this.id = id;
+    	this.inputFactor = inputFactor;
         this.outputFactor = outputFactor;
         this.enabled = enabled;
                 
@@ -68,12 +69,4 @@ public class Interface extends PodfxEntity {
         this.inputFactor = inputFactor;
     }
     
-    public void update(InterfaceDetail input) {
-        this.enabled = input.isEnabled();
-        this.physicalConnection = input.getPhysicalConnection();
-        this.energyTransfer = input.getEnergyTransfer();
-        this.materialExchange = input.getMaterialExchange();
-        this.dataExchange = input.getDataExchange();
-    }
-
 }

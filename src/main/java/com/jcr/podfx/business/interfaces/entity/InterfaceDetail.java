@@ -18,9 +18,9 @@ public class InterfaceDetail implements Serializable {
      *
      */
     private static final long serialVersionUID = 1L;
-    private Long id;
-    private Long inputFactorId;
-    private Long outputFactorId;
+    private String id;
+    private String inputFactorId;
+    private String outputFactorId;
     private boolean enabled;
     private String physicalConnection;
     private String energyTransfer;
@@ -31,7 +31,7 @@ public class InterfaceDetail implements Serializable {
 
     }
 
-    public InterfaceDetail(Long id, Long inputFactorId, Long outputFactorId, boolean enabled, String physicalConnection,
+    public InterfaceDetail(String id, String inputFactorId, String outputFactorId, boolean enabled, String physicalConnection,
             String energyTranfer, String materialExchange, String dataExchange) {
         this.id = id;
         this.inputFactorId = inputFactorId;
@@ -43,27 +43,27 @@ public class InterfaceDetail implements Serializable {
         this.dataExchange = dataExchange;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Long getInputFactorId() {
+    public String getInputFactorId() {
         return inputFactorId;
     }
 
-    public void setInputFactorId(Long inputFactorId) {
+    public void setInputFactorId(String inputFactorId) {
         this.inputFactorId = inputFactorId;
     }
 
-    public Long getOutputFactorId() {
+    public String getOutputFactorId() {
         return outputFactorId;
     }
 
-    public void setOutputFactorId(Long outputFactorId) {
+    public void setOutputFactorId(String outputFactorId) {
         this.outputFactorId = outputFactorId;
     }
 

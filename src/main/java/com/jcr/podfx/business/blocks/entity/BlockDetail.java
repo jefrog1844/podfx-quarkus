@@ -13,65 +13,57 @@ import java.io.Serializable;
  */
 public class BlockDetail implements Serializable {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 4961011122899551814L;
-    private Long id;
-    private String name;
-    private String type;
-    private Long dfmeaId = new Long(0);
-    private Long parentId;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 4961011122899551814L;
+	private String id;
+	private String name;
+	private String type;
+	private String dfmeaId;
+	private String parentId;
 
-    public BlockDetail() {
-        
-    }
-    
-    public BlockDetail(Long id, String name, String type, Long dfmeaId, Long parentId) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-        this.dfmeaId = dfmeaId;
-        this.parentId = parentId;
-    }
+	public BlockDetail() {
 
-    public Long getId() {
-        return id;
-    }
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public Long getDfmeaId() {
-        return dfmeaId;
-    }
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    public void setDfmeaId(Long dfmeaId) {
-        this.dfmeaId = dfmeaId;
-    }
+	public String getDfmeaId() {
+		return dfmeaId;
+	}
 
-    public Long getParentId() {
-        return parentId;
-    }
+	public void setDfmeaId(String dfmeaId) {
+		this.dfmeaId = dfmeaId;
+	}
 
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
-    }
+	public String getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
 }

@@ -1,22 +1,24 @@
 package com.jcr.podfx.business.interfaces.control;
 
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toMap;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+
+import com.jcr.podfx.business.IdGenerator;
 import com.jcr.podfx.business.factors.entity.Factor;
 import com.jcr.podfx.business.funktions.boundary.FunktionFacade;
 import com.jcr.podfx.business.interfaces.entity.Interface;
 import com.jcr.podfx.business.interfaces.entity.Matrix;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import static java.util.Collections.singletonList;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import static java.util.stream.Collectors.toMap;
-import java.util.stream.Stream;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 
 @ApplicationScoped
 public class InterfaceController {
@@ -27,7 +29,7 @@ public class InterfaceController {
     @Inject
     FunktionFacade ff;
 
-    public Collection<Matrix> getInterfaceMatrix(Long dfmeaId) {
+    public Collection<Matrix> getInterfaceMatrix(String dfmeaId) {
         List<Interface> results = em.createQuery(
                 "select i from Interface i " + "JOIN Factor fInput on fInput.id = i.inputFactor.id "
                 + "JOIN Factor fOutput on fOutput.id = i.outputFactor.id " + "where fInput.dfmea.id = :dfmeaId",
@@ -42,8 +44,8 @@ public class InterfaceController {
         return matrices;
     }
 
-    @Transactional
-    public int generateFunktions(long dfmeaId) {
+    //@Transactional
+    public int generateFunktions(String dfmeaId) {
         List<Interface> interfaces = em.createQuery(
                 "select i from Interface i " + "JOIN Factor fInput on fInput.id = i.inputFactor.id "
                 + "JOIN Factor fOutput on fOutput.id = i.outputFactor.id " + "where fInput.dfmea.id = :dfmeaId",
@@ -70,5 +72,10 @@ public class InterfaceController {
             i.setOutputFactor(null);
             em.remove(i);
         }
+    }
+    
+    public void save(Factor input, Factor output) {
+    	Interface i = new Interface(IdGenerator.createId(),input, output, false);
+		i.persist();
     }
 }

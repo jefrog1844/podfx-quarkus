@@ -1,53 +1,54 @@
 package com.jcr.podfx.business.factors.control;
 
-import com.jcr.podfx.business.dfmeas.entity.Dfmea;
-import com.jcr.podfx.business.factors.entity.Factor;
-import com.jcr.podfx.business.factors.entity.FactorDetail;
-import com.jcr.podfx.business.interfaces.control.InterfaceController;
-import com.jcr.podfx.business.interfaces.entity.Interface;
 import java.util.Optional;
 import java.util.Set;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.NotFoundException;
 
+import com.jcr.podfx.business.IdGenerator;
+import com.jcr.podfx.business.dfmeas.entity.Dfmea;
+import com.jcr.podfx.business.factors.entity.Factor;
+import com.jcr.podfx.business.factors.entity.FactorDetail;
+import com.jcr.podfx.business.interfaces.control.InterfaceController;
+
 @ApplicationScoped
 public class FactorController {
 
-    @Inject
-    InterfaceController ic;
+	@Inject
+	InterfaceController ic;
 
-    public void delete(Long dfmeaId, Long factorId) {
-        Optional<Factor> optional = Factor.findByIdOptional(factorId);
-        Factor factor = optional.orElseThrow(() -> new NotFoundException());
+	public void delete(String dfmeaId, String factorId) {
+		Optional<Factor> optional = Factor.findByIdOptional(factorId);
+		Factor factor = optional.orElseThrow(() -> new NotFoundException());
+		ic.deleteInterface(factor);
+		Dfmea dfmea = Dfmea.findById(dfmeaId);
+		dfmea.removeFactor(factor);
 
-        ic.deleteInterface(factor);
-        if (factor.isPersistent()) {
-            factor.delete();
-        }
-    }
+		
 
-    public void save(Long dfmeaId, FactorDetail detail) {
-        Factor output = new Factor(detail);
-        Dfmea dfmea = Dfmea.findById(dfmeaId);
-        dfmea.getFactors().add(output);
-        output.setDfmea(dfmea);
-        Set<Factor> factors = dfmea.getFactors();
-        for (Factor input : factors) {
-            if (input.isExternal() && output.isExternal()) {
-                continue;
-            } else if (input.equals(output)) {
-                continue;
-            } else if (input.isInternal()) {
-                createInterface(input, output);
-            } else {
-                createInterface(output, input);
-            }
-        }
-    }
+	}
 
-    private void createInterface(Factor input, Factor output) {
-        Interface i = new Interface(input, output, false);
-        i.persist();
-    }
+	public void save(String dfmeaId, FactorDetail detail) {
+		Factor output = new Factor(IdGenerator.createId(), detail.getType(), detail.getName(), detail.getCategory());
+		Dfmea dfmea = Dfmea.findById(dfmeaId);
+		dfmea.addFactor(output);
+		Set<Factor> factors = dfmea.getFactors();
+		for (Factor input : factors) {
+			if (input.isExternal() && output.isExternal()) {
+				continue;
+			} else if (input.equals(output)) {
+				continue;
+			} else if (input.isInternal()) {
+				createInterface(input, output);
+			} else {
+				createInterface(output, input);
+			}
+		}
+	}
+
+	private void createInterface(Factor input, Factor output) {
+		ic.save(input, output);
+	}
 }

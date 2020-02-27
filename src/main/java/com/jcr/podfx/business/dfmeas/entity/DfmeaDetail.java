@@ -8,7 +8,7 @@ public class DfmeaDetail implements Serializable {
 
     private static final long serialVersionUID = -47949268619774633L;
 
-    private long id;
+    private String id;
 
     private String number;
     private String title;
@@ -27,7 +27,7 @@ public class DfmeaDetail implements Serializable {
 
     }
 
-    public DfmeaDetail(long id, String number, String title, String type, String originator, LocalDate originated,
+    public DfmeaDetail(String id, String number, String title, String type, String originator, LocalDate originated,
             LocalDate revised, String teamMembers, String partNumber) {
         this.id = id;
         this.number = number;
@@ -40,11 +40,11 @@ public class DfmeaDetail implements Serializable {
         this.partNumber = partNumber;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
