@@ -1,5 +1,6 @@
 package com.jcr.podfx.business.interfaces.entity;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -18,10 +19,12 @@ public class Interface extends PodfxEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "OUTPUT_FACTOR_ID", nullable = true)
+    @JsonbTransient
     private Factor outputFactor;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "INPUT_FACTOR_ID")
+    @JsonbTransient
     private Factor inputFactor;
 
     public boolean enabled;

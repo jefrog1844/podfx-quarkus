@@ -1,12 +1,20 @@
 package com.jcr.podfx.business.factors.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.json.bind.annotation.JsonbTransient;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.jcr.podfx.business.PodfxEntity;
+import com.jcr.podfx.business.blocks.entity.Block;
 import com.jcr.podfx.business.dfmeas.entity.Dfmea;
+import com.jcr.podfx.business.interfaces.entity.Interface;
 
 @Entity
 public class Factor extends PodfxEntity {
@@ -28,7 +36,25 @@ public class Factor extends PodfxEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DFMEA_ID")
+    @JsonbTransient
     private Dfmea dfmea;
+    
+    @OneToMany(
+            mappedBy = "inputFactor",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JsonbTransient
+    private Set<Interface> inputs = new HashSet<>();
+    
+    @OneToMany(
+            mappedBy = "outputFactor",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JsonbTransient
+    private Set<Interface> outputs = new HashSet<>();
+    
 
     public String type;
     public String name;
