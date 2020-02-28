@@ -6,46 +6,48 @@
 package com.jcr.podfx.business.interfaces.entity;
 
 import com.jcr.podfx.business.factors.entity.Factor;
+import com.jcr.podfx.business.factors.entity.FactorDetail;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
 
 /**
  *
  * @author jeffrogers
  */
 public class Matrix implements Serializable {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
-    private Factor inputFactor;
-    private List<Interface> interfaces = new ArrayList<>();
-    
-    public Matrix() {
-        
-    }
-    
-    public Matrix (Factor inputFactor, List<Interface> interfaces) {
-        this.inputFactor = inputFactor;
-        this.interfaces = interfaces;
-    }
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
+	private FactorDetail inputFactor;
+	private Set<InterfaceDetail> interfaces = new HashSet<>();
 
-    public Factor getInputFactor() {
-        return inputFactor;
-    }
+	public Matrix() {
 
-    public void setInputFactor(Factor inputFactor) {
-        this.inputFactor = inputFactor;
-    }
+	}
 
-    public List<Interface> getInterfaces() {
-        return interfaces;
-    }
+	public Matrix(Factor inputFactor, Set<Interface> interfaces) {
+		this.inputFactor = new FactorDetail(inputFactor.id, inputFactor.name, inputFactor.type, inputFactor.category,
+				inputFactor.getDfmea().id);
 
-    public void setInterfaces(List<Interface> interfaces) {
-        this.interfaces = interfaces;
-    }
-    
+		for (Interface i : interfaces) {
+			InterfaceDetail detail = new InterfaceDetail(i.id, i.getInputFactor().id, i.getOutputFactor().id, i.enabled,
+					i.physicalConnection, i.energyTransfer, i.materialExchange, i.dataExchange);
+			this.interfaces.add(detail);
+		}
+
+	}
+
+	public FactorDetail getInputFactor() {
+		return inputFactor;
+	}
+
+	public Set<InterfaceDetail> getInterfaces() {
+		return interfaces;
+	}
+
 }

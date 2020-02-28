@@ -29,19 +29,9 @@ public class InterfaceController {
     @Inject
     FunktionFacade ff;
 
-    public Collection<Matrix> getInterfaceMatrix(String dfmeaId) {
-        List<Interface> results = em.createQuery(
-                "select i from Interface i " + "JOIN Factor fInput on fInput.id = i.inputFactor.id "
-                + "JOIN Factor fOutput on fOutput.id = i.outputFactor.id " + "where fInput.dfmea.id = :dfmeaId",
-                Interface.class).setParameter("dfmeaId", dfmeaId).getResultList();
-
-        Collection<Matrix> matrices = results.stream().sorted((i1, i2) -> i1.getOutputFactor().name.compareTo(i2.getOutputFactor().name)).collect(toMap(Interface::getInputFactor,
-                i -> new Matrix(i.getInputFactor(), new ArrayList<Interface>(singletonList(i))), (i1, i2) -> {
-                    i1.getInterfaces().addAll(i2.getInterfaces());
-                    return i1;
-                })).values();
-
-        return matrices;
+    public List<Matrix> getInterfaceMatrix(String dfmeaId) {
+    	List<Factor> factors = Factor.find("category='Internal' and dfmea_id=?1",dfmeaId).list();
+    	return factors.stream().map(f -> new Matrix(f,f.inputs)).collect(Collectors.toList());
     }
 
     //@Transactional

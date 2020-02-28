@@ -45,7 +45,7 @@ public class Factor extends PodfxEntity {
             orphanRemoval = true
     )
     @JsonbTransient
-    private Set<Interface> inputs = new HashSet<>();
+    public Set<Interface> inputs = new HashSet<>();
     
     @OneToMany(
             mappedBy = "outputFactor",
@@ -53,7 +53,7 @@ public class Factor extends PodfxEntity {
             orphanRemoval = true
     )
     @JsonbTransient
-    private Set<Interface> outputs = new HashSet<>();
+    public Set<Interface> outputs = new HashSet<>();
     
 
     public String type;
