@@ -1,10 +1,5 @@
 package com.jcr.podfx.business.interfaces.control;
 
-import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toMap;
-
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
