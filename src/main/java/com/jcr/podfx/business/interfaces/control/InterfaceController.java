@@ -25,8 +25,8 @@ public class InterfaceController {
     FunktionFacade ff;
 
     public List<Matrix> getInterfaceMatrix(String dfmeaId) {
-    	List<Factor> factors = Factor.find("category='Internal' and dfmea_id=?1",dfmeaId).list();
-    	return factors.stream().map(f -> new Matrix(f,f.inputs)).collect(Collectors.toList());
+    	List<Factor> factors = Factor.find("type='INTERNAL' and dfmea_id=?1",dfmeaId).list();
+    	return factors.stream().map(f -> new Matrix(f)).collect(Collectors.toList());
     }
 
     //@Transactional

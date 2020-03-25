@@ -23,30 +23,48 @@ public class Matrix implements Serializable {
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
-	private FactorDetail inputFactor;
-	private Set<InterfaceDetail> interfaces = new HashSet<>();
+	private Factor inputFactor;
 
 	public Matrix() {
 
 	}
 
-	public Matrix(Factor inputFactor, Set<Interface> interfaces) {
-		this.inputFactor = new FactorDetail(inputFactor.id, inputFactor.name, inputFactor.type, inputFactor.category,
-				inputFactor.getDfmea().id);
-
-		for (Interface i : interfaces) {
-			InterfaceDetail detail = new InterfaceDetail(i.id, i.getInputFactor().id, i.getOutputFactor().id, i.enabled,
-					i.physicalConnection, i.energyTransfer, i.materialExchange, i.dataExchange);
-			this.interfaces.add(detail);
-		}
-
+	public Matrix(Factor inputFactor) {
+		this.inputFactor = inputFactor;
 	}
 
 	public FactorDetail getInputFactor() {
-		return inputFactor;
+		return new FactorDetail(inputFactor.id, inputFactor.name, inputFactor.type, inputFactor.category,
+				inputFactor.getDfmea().id);
 	}
 
-	public Set<InterfaceDetail> getInterfaces() {
+	public Set<InterfaceDetail> getInternalInterfaces() {
+		Set<InterfaceDetail> interfaces = new HashSet<>();
+		for (Interface i : inputFactor.outputs) {
+			
+			if (i.isInternal()) {
+				System.out.println(i.getInputFactor().name+"--->"+i.getOutputFactor().name);
+				InterfaceDetail detail = new InterfaceDetail(i.id, i.getInputFactor().id, i.getOutputFactor().id,
+						i.enabled, i.physicalConnection, i.energyTransfer, i.materialExchange, i.dataExchange);
+				interfaces.add(detail);
+			}
+		}
+
+		return interfaces;
+	}
+
+	public Set<InterfaceDetail> getExternalInterfaces() {
+		Set<InterfaceDetail> interfaces = new HashSet<>();
+		for (Interface i : inputFactor.outputs) {
+			
+			if (!i.isInternal()) {
+				System.out.println(i.getInputFactor().name+"--->"+i.getOutputFactor().name);
+				InterfaceDetail detail = new InterfaceDetail(i.id, i.getInputFactor().id, i.getOutputFactor().id,
+						i.enabled, i.physicalConnection, i.energyTransfer, i.materialExchange, i.dataExchange);
+				interfaces.add(detail);
+			}
+		}
+
 		return interfaces;
 	}
 

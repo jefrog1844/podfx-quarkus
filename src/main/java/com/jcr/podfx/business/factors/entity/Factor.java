@@ -40,7 +40,7 @@ public class Factor extends PodfxEntity {
     private Dfmea dfmea;
     
     @OneToMany(
-            mappedBy = "inputFactor",
+            mappedBy = "outputFactor",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
@@ -48,7 +48,7 @@ public class Factor extends PodfxEntity {
     public Set<Interface> inputs = new HashSet<>();
     
     @OneToMany(
-            mappedBy = "outputFactor",
+            mappedBy = "inputFactor",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
