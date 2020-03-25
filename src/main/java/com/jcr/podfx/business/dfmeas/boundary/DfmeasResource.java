@@ -43,7 +43,7 @@ public class DfmeasResource {
     @RolesAllowed("create")
     @Consumes(MediaType.APPLICATION_JSON)
     public void save(DfmeaDetail input) {
-        Dfmea dfmea = new Dfmea(IdGenerator.createId(), input);
+        Dfmea dfmea = new Dfmea(input);
         dfmea.persist();
     }
 

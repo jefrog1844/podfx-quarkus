@@ -66,5 +66,11 @@ public abstract class PodfxEntity extends PanacheEntityBase {
 		return this.getClass().getSimpleName() + "<" + id + ">";
 	}
 
+	@Override
+	public void persist() {
+		id = IdGenerator.createId();
+		super.persist();
+	}
+
 	
 }

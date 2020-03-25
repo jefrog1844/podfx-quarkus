@@ -37,8 +37,7 @@ public class Interface extends PodfxEntity {
         
     }
     
-    public Interface(String id, Factor inputFactor, Factor outputFactor, boolean enabled) {
-        this.id = id;
+    public Interface(Factor inputFactor, Factor outputFactor, boolean enabled) {
     	this.inputFactor = inputFactor;
         this.outputFactor = outputFactor;
         this.enabled = enabled;

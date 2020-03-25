@@ -60,7 +60,7 @@ public class InterfaceController {
     }
     
     public void save(Factor input, Factor output) {
-    	Interface i = new Interface(IdGenerator.createId(),input, output, false);
+    	Interface i = new Interface(input, output, false);
 		i.persist();
     }
 }

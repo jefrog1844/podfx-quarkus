@@ -44,8 +44,7 @@ public class Dfmea extends PodfxEntity {
     }
     
     
-    public Dfmea(String id, DfmeaDetail detail) {
-        this.id = id;
+    public Dfmea(DfmeaDetail detail) {
     	update(detail);
     }
     
