@@ -19,8 +19,6 @@ public class InterfaceDetail implements Serializable {
      */
     private static final long serialVersionUID = 1L;
     private String id;
-    private String inputFactorId;
-    private String outputFactorId;
     private boolean enabled;
     private String physicalConnection;
     private String energyTransfer;
@@ -31,11 +29,9 @@ public class InterfaceDetail implements Serializable {
 
     }
 
-    public InterfaceDetail(String id, String inputFactorId, String outputFactorId, boolean enabled, String physicalConnection,
+    public InterfaceDetail(String id, boolean enabled, String physicalConnection,
             String energyTranfer, String materialExchange, String dataExchange) {
         this.id = id;
-        this.inputFactorId = inputFactorId;
-        this.outputFactorId = outputFactorId;
         this.enabled = enabled;
         this.physicalConnection = physicalConnection;
         this.energyTransfer = energyTranfer;
@@ -49,22 +45,6 @@ public class InterfaceDetail implements Serializable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getInputFactorId() {
-        return inputFactorId;
-    }
-
-    public void setInputFactorId(String inputFactorId) {
-        this.inputFactorId = inputFactorId;
-    }
-
-    public String getOutputFactorId() {
-        return outputFactorId;
-    }
-
-    public void setOutputFactorId(String outputFactorId) {
-        this.outputFactorId = outputFactorId;
     }
 
     public void setEnabled(boolean enabled) {

@@ -5,14 +5,17 @@
  */
 package com.jcr.podfx.business.interfaces.entity;
 
+import java.io.Serializable;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import com.jcr.podfx.business.factors.entity.Factor;
 import com.jcr.podfx.business.factors.entity.FactorDetail;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  *
@@ -38,34 +41,60 @@ public class Matrix implements Serializable {
 				inputFactor.getDfmea().id);
 	}
 
-	public Set<InterfaceDetail> getInternalInterfaces() {
-		Set<InterfaceDetail> interfaces = new HashSet<>();
-		for (Interface i : inputFactor.outputs) {
-			
-			if (i.isInternal()) {
-				System.out.println(i.getInputFactor().name+"--->"+i.getOutputFactor().name);
-				InterfaceDetail detail = new InterfaceDetail(i.id, i.getInputFactor().id, i.getOutputFactor().id,
-						i.enabled, i.physicalConnection, i.energyTransfer, i.materialExchange, i.dataExchange);
-				interfaces.add(detail);
-			}
-		}
-
-		return interfaces;
+	public Set<Map<String, Object>> getInternalInterfaces() {
+		return buildResponse(true);
 	}
 
-	public Set<InterfaceDetail> getExternalInterfaces() {
-		Set<InterfaceDetail> interfaces = new HashSet<>();
-		for (Interface i : inputFactor.outputs) {
-			
-			if (!i.isInternal()) {
-				System.out.println(i.getInputFactor().name+"--->"+i.getOutputFactor().name);
-				InterfaceDetail detail = new InterfaceDetail(i.id, i.getInputFactor().id, i.getOutputFactor().id,
-						i.enabled, i.physicalConnection, i.energyTransfer, i.materialExchange, i.dataExchange);
-				interfaces.add(detail);
-			}
-		}
-
-		return interfaces;
+	public Set<Map<String, Object>> getExternalInterfaces() {
+		return buildResponse(false);
 	}
 
+	private Set<Map<String, Object>> buildResponse(boolean internal) {
+		Predicate<Interface> p = getInternalPredicate(internal);
+		System.out.println("predicate= "+internal);
+		Set<Interface> interfaces = inputFactor.outputs.stream().filter(p).collect(Collectors.toSet());
+		System.out.println("interfaces.size()= "+interfaces.size());
+		return initiateInterfaceMap(interfaces);
+	}
+
+	private Set<Map<String, Object>> initiateInterfaceMap(Set<Interface> interfaces) {
+		Set<Map<String, Object>> interfaceMap = new TreeSet<Map<String, Object>>(comparator());
+		for (Interface i : interfaces) {
+			interfaceMap.add(populateMap(i));
+		}
+		return interfaceMap;
+	}
+
+	private Comparator<Map<String, Object>> comparator() {
+		return new Comparator<Map<String, Object>>() {
+			@Override
+			public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+				return o1.get("outputFactorName").toString().compareTo(o2.get("outputFactorName").toString());
+			}
+
+		};
+	}
+
+	private Predicate<Interface> getInternalPredicate(boolean test) {
+		Predicate<Interface> p = new Predicate<Interface>() {
+
+			@Override
+			public boolean test(Interface t) {
+				return t.isInternal() == test;
+			}
+		};
+		return p;
+	}
+
+	private Map<String, Object> populateMap(Interface i) {
+		Map<String, Object> attrs = new HashMap<String, Object>();
+		attrs.put("physicalConnection", i.physicalConnection);
+		attrs.put("energyTransfer", i.energyTransfer);
+		attrs.put("materialExchange", i.materialExchange);
+		attrs.put("dataExchange", i.dataExchange);
+		attrs.put("outputFactorName", i.getOutputFactor().name);
+		attrs.put("enabled", i.enabled);
+		attrs.put("id", i.id);
+		return attrs;
+	}
 }
