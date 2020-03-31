@@ -97,7 +97,6 @@ public class TokenUtils {
      */
     public static PrivateKey readPrivateKey(final String pemResName) throws Exception {
         InputStream contentIS = TokenUtils.class.getResourceAsStream(pemResName);
-        System.out.println("contentIS==== " + contentIS.toString());
         byte[] tmp = new byte[4096];
         int length = contentIS.read(tmp);
         return decodePrivateKey(new String(tmp, 0, length, "UTF-8"));

@@ -16,7 +16,6 @@ public class GenerateToken {
         timeClaims.put(Claims.exp.name(), exp);
 
         String token = TokenUtils.generateTokenString(user, timeClaims);
-        System.out.println(token);
         return token;
     }
 }

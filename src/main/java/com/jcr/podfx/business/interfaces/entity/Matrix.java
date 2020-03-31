@@ -51,9 +51,7 @@ public class Matrix implements Serializable {
 
 	private Set<Map<String, Object>> buildResponse(boolean internal) {
 		Predicate<Interface> p = getInternalPredicate(internal);
-		System.out.println("predicate= "+internal);
 		Set<Interface> interfaces = inputFactor.outputs.stream().filter(p).collect(Collectors.toSet());
-		System.out.println("interfaces.size()= "+interfaces.size());
 		return initiateInterfaceMap(interfaces);
 	}
 
