@@ -34,33 +34,5 @@ public class UsersResourceTest {
                 .then()
                 .statusCode(200);
     }
-    
-    @Test
-    public void getToken() {
-        JSONObject body = new JSONObject();
-        body.put("username", "user");
-        body.put("password", "123");
-        Response response = given()
-                .contentType("application/json")
-                .body(body.toString())
-                .post("/users/signIn")
-                .then()
-                .contentType(ContentType.JSON).extract().response();
-        
-        String token = response.jsonPath().get("password");
-        System.out.println("my token.... "+token);
-        
-        
-        given()
-                .header("Authorization", "Bearer "+token)
-                .when()
-                .get("/dfmeas")
-                .then()
-                .statusCode(200);
-    }
-    
-    @Test
-    public void testDfmeasResourceFind() {
-        
-    }
+
 }
