@@ -16,18 +16,18 @@ public class UserFacade {
     @PersistenceContext
     EntityManager em;
 
-    public Credentials signIn(Credentials creds) {
+    public Credentials signIn(String username, String password) {
         User user = null;
-        if (creds != null && creds.getUsername() != null) {
+        if (username != null) {
             user = em.
                     createNamedQuery(User.FIND_BY_USERNAME, User.class).
-                    setParameter("username", creds.getUsername()).
+                    setParameter("username", username).
                     getSingleResult();
-            if (user == null || creds.getPassword() == null || !checkPassword(user.getPassword(), creds.getPassword())) {
-                throw new EntityNotFoundException("Invalid credentials!");
+            if (user == null || password == null || !checkPassword(user.getPassword(), password)) {
+                throw new EntityNotFoundException("Invalid username or password!");
             }
         } else {
-            throw new EntityNotFoundException("Invalid credentials!");
+            throw new EntityNotFoundException("Invalid username or password!");
         }
 
         String token = null;
@@ -36,8 +36,9 @@ public class UserFacade {
         } catch (Exception ex) {
             Logger.getLogger(UserFacade.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        creds.setPassword(token);
+        
+        Credentials creds = new Credentials();
+        creds.setToken(token);
         return creds;
     }
 

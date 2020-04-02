@@ -11,7 +11,7 @@ package com.jcr.podfx.business.users.entity;
  */
 public class Credentials {
     private String username;
-    private String password;
+    private String token;
 
     public Credentials() {
     }
@@ -24,12 +24,12 @@ public class Credentials {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getToken() {
+        return token;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setToken(String token) {
+        this.token = token;
     }
     
     
