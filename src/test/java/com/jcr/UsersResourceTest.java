@@ -5,14 +5,9 @@
  */
 package com.jcr;
 
-import com.jcr.podfx.business.dfmeas.entity.Dfmea;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
-import java.util.List;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.equalTo;
 import org.jose4j.json.internal.json_simple.JSONObject;
 
@@ -22,20 +17,19 @@ import org.jose4j.json.internal.json_simple.JSONObject;
  */
 @QuarkusTest
 public class UsersResourceTest {
-
+    
     @Test
     public void testSignInEndpoint() {
         JSONObject body = new JSONObject();
         body.put("username", "user");
         body.put("password", "123");
-       given()
+        given()
                 .contentType("application/json")
                 .body(body.toString())
                 .post("/users/signIn")
                 .then()
-                .body("username", equalTo("user"));
-        
-        
+                .body("username", equalTo("user"))
+                .statusCode(200);
     }
-
+    
 }
