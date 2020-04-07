@@ -22,7 +22,7 @@ public class BlockController {
         if (input != null) {
             Block parent = null;
             Dfmea dfmea = Dfmea.findById(dfmeaId);
-            if (input.getParentId() != null) {
+            if (input.getParentId() != null && !input.getParentId().equals("")) {
                 Optional<Block> optional = Block.findByIdOptional(input.getParentId());
                 parent = optional.orElseThrow(() -> new NotFoundException());
             }
