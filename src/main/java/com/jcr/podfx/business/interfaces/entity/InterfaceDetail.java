@@ -18,7 +18,7 @@ public class InterfaceDetail implements Serializable {
      *
      */
     private static final long serialVersionUID = 1L;
-    private String id;
+    private Long id;
     private boolean enabled;
     private String physicalConnection;
     private String energyTransfer;
@@ -29,7 +29,7 @@ public class InterfaceDetail implements Serializable {
 
     }
 
-    public InterfaceDetail(String id, boolean enabled, String physicalConnection,
+    public InterfaceDetail(Long id, boolean enabled, String physicalConnection,
             String energyTranfer, String materialExchange, String dataExchange) {
         this.id = id;
         this.enabled = enabled;
@@ -39,11 +39,11 @@ public class InterfaceDetail implements Serializable {
         this.dataExchange = dataExchange;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

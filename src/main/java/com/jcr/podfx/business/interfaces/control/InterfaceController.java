@@ -9,7 +9,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import com.jcr.podfx.business.IdGenerator;
 import com.jcr.podfx.business.factors.entity.Factor;
 import com.jcr.podfx.business.funktions.boundary.FunktionFacade;
 import com.jcr.podfx.business.interfaces.entity.Interface;
@@ -24,13 +23,13 @@ public class InterfaceController {
     @Inject
     FunktionFacade ff;
 
-    public List<Matrix> getInterfaceMatrix(String dfmeaId) {
-    	List<Factor> factors = Factor.find("type='INTERNAL' and dfmea_id=?1",dfmeaId).list();
-    	return factors.stream().map(f -> new Matrix(f)).collect(Collectors.toList());
+    public List<Matrix> getInterfaceMatrix(Long dfmeaId) {
+        List<Factor> factors = Factor.find("type='INTERNAL' and dfmea_id=?1", dfmeaId).list();
+        return factors.stream().map(f -> new Matrix(f)).collect(Collectors.toList());
     }
 
     //@Transactional
-    public int generateFunktions(String dfmeaId) {
+    public int generateFunktions(Long dfmeaId) {
         List<Interface> interfaces = em.createQuery(
                 "select i from Interface i " + "JOIN Factor fInput on fInput.id = i.inputFactor.id "
                 + "JOIN Factor fOutput on fOutput.id = i.outputFactor.id " + "where fInput.dfmea.id = :dfmeaId",
@@ -58,9 +57,9 @@ public class InterfaceController {
             em.remove(i);
         }
     }
-    
+
     public void save(Factor input, Factor output) {
-    	Interface i = new Interface(input, output, false);
-		i.persist();
+        Interface i = new Interface(input, output, false);
+        i.persist();
     }
 }

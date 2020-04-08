@@ -10,7 +10,6 @@ import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.NotFoundException;
 
-import com.jcr.podfx.business.IdGenerator;
 import com.jcr.podfx.business.blocks.entity.Block;
 import com.jcr.podfx.business.blocks.entity.BlockDetail;
 import com.jcr.podfx.business.dfmeas.entity.Dfmea;
@@ -18,16 +17,16 @@ import com.jcr.podfx.business.dfmeas.entity.Dfmea;
 @ApplicationScoped
 public class BlockController {
 
-    public void save(String dfmeaId, BlockDetail input) {
+    public void save(Long dfmeaId, BlockDetail input) {
         if (input != null) {
             Block parent = null;
             Dfmea dfmea = Dfmea.findById(dfmeaId);
-            if (input.getParentId() != null && !input.getParentId().equals("")) {
+            if (input.getParentId() != null && !input.getParentId().equals(Long.valueOf(0))) {
                 Optional<Block> optional = Block.findByIdOptional(input.getParentId());
                 parent = optional.orElseThrow(() -> new NotFoundException());
             }
 
-            Block block = new Block(IdGenerator.createId(), input.getName(), input.getType());
+            Block block = new Block(input.getName(), input.getType());
             if (parent != null) {
                 parent.addChild(block);
             }

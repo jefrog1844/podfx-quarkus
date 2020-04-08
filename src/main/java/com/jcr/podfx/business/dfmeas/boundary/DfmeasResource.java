@@ -21,7 +21,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import com.jcr.podfx.business.IdGenerator;
 import com.jcr.podfx.business.dfmeas.entity.Dfmea;
 import com.jcr.podfx.business.dfmeas.entity.DfmeaDetail;
 
@@ -51,7 +50,7 @@ public class DfmeasResource {
     @GET
     @RolesAllowed("read")
     @Produces(MediaType.APPLICATION_JSON)
-    public Dfmea get(@PathParam("dfmeaId") String id) {
+    public Dfmea get(@PathParam("dfmeaId") Long id) {
         Optional<Dfmea> optional = Dfmea.findByIdOptional(id);
         Dfmea dfmea = optional.orElseThrow(() -> new NotFoundException());
         return dfmea;
@@ -62,7 +61,7 @@ public class DfmeasResource {
     @Transactional
     @RolesAllowed("delete")
     @Produces(MediaType.APPLICATION_JSON)
-    public void delete(@PathParam("dfmeaId") String id) {
+    public void delete(@PathParam("dfmeaId") Long id) {
         Dfmea dfmea = get(id);
         if (dfmea.isPersistent()) {
             dfmea.delete();
@@ -73,7 +72,7 @@ public class DfmeasResource {
     @PUT
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
-    public void update(@PathParam("dfmeaId") String dfmeaId,
+    public void update(@PathParam("dfmeaId") Long dfmeaId,
             DfmeaDetail input) {
         Dfmea dfmea = get(dfmeaId);
         dfmea.update(input);

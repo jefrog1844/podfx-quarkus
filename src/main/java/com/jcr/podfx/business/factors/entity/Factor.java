@@ -64,8 +64,7 @@ public class Factor extends PodfxEntity {
         
     }
     
-    public Factor(String id, String type, String name, String category) {
-        this.id = id;
+    public Factor(String type, String name, String category) {
     	this.type = type;
         this.name = name;
         this.category = category;

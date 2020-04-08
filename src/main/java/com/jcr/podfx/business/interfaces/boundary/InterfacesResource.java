@@ -24,47 +24,47 @@ import javax.ws.rs.NotFoundException;
 @Path("/dfmeas/{dfmeaId}/interfaces")
 public class InterfacesResource {
 
-	@Inject
-	InterfaceController ic;
+    @Inject
+    InterfaceController ic;
 
-	@Path("{interfaceId}")
-	@GET
-	@RolesAllowed("read")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Interface getInterface(@PathParam("interfaceId") String interfaceId) {
-		Optional<Interface> optional = Interface.findByIdOptional(interfaceId);
-		return optional.orElseThrow(() -> new NotFoundException());
-	}
+    @Path("{interfaceId}")
+    @GET
+    @RolesAllowed("read")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Interface getInterface(@PathParam("interfaceId") Long interfaceId) {
+        Optional<Interface> optional = Interface.findByIdOptional(interfaceId);
+        return optional.orElseThrow(() -> new NotFoundException());
+    }
 
-	@GET
-	@RolesAllowed("read")
-	@Path("matrix")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Matrix> getInterfaceMatrix(@PathParam("dfmeaId") String dfmeaId) {
-		return ic.getInterfaceMatrix(dfmeaId);
-	}
+    @GET
+    @RolesAllowed("read")
+    @Path("matrix")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Collection<Matrix> getInterfaceMatrix(@PathParam("dfmeaId") Long dfmeaId) {
+        return ic.getInterfaceMatrix(dfmeaId);
+    }
 
-	@Path("{interfaceId}")
-	@PUT
-	@Transactional
-	@RolesAllowed("update")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public void update(@PathParam("dfmeaId") String dfmeaId, @PathParam("interfaceId") String interfaceId,
-			InterfaceDetail input) {
-		Interface.update(
-				"enabled=?1,physicalConnection=?2,energyTransfer=?3,materialExchange=?4,dataExchange=?5 where id=?6",
-				input.isEnabled(), input.getPhysicalConnection(), input.getEnergyTransfer(),
-				input.getMaterialExchange(), input.getDataExchange(), input.getId());
-	}
+    @Path("{interfaceId}")
+    @PUT
+    @Transactional
+    @RolesAllowed("update")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public void update(@PathParam("dfmeaId") Long dfmeaId, @PathParam("interfaceId") Long interfaceId,
+            InterfaceDetail input) {
+        Interface.update(
+                "enabled=?1,physicalConnection=?2,energyTransfer=?3,materialExchange=?4,dataExchange=?5 where id=?6",
+                input.isEnabled(), input.getPhysicalConnection(), input.getEnergyTransfer(),
+                input.getMaterialExchange(), input.getDataExchange(), input.getId());
+    }
 
-	@GET
-	@Transactional
-	@RolesAllowed("read")
-	@Path("generateFunktions")
-	@Produces(MediaType.APPLICATION_JSON)
-	public int generateFunktions(@PathParam("dfmeaId") String dfmeaId) {
-		return ic.generateFunktions(dfmeaId);
-	}
+    @GET
+    @Transactional
+    @RolesAllowed("read")
+    @Path("generateFunktions")
+    @Produces(MediaType.APPLICATION_JSON)
+    public int generateFunktions(@PathParam("dfmeaId") Long dfmeaId) {
+        return ic.generateFunktions(dfmeaId);
+    }
 
 };

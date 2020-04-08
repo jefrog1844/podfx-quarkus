@@ -90,6 +90,7 @@ public class Dfmea extends PodfxEntity {
         this.teamMembers = input.getTeamMembers();
         this.partNumber = input.getPartNumber();
         this.revised = LocalDate.now();
+        this.originator = input.getOriginator();
     }
     
 }

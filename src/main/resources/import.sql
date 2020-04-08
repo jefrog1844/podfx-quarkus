@@ -86,3 +86,10 @@ INSERT INTO interface (id, dataexchange, enabled, energytransfer, materialexchan
 	VALUES (26, NULL, false, NULL, NULL, NULL, 5, 12);
 INSERT INTO interface (id, dataexchange, enabled, energytransfer, materialexchange, physicalconnection, input_factor_id, output_factor_id) 
 	VALUES (27, NULL, false, NULL, NULL, NULL, 5, 13);
+ALTER SEQUENCE auth_id_seq restart with 100;
+ALTER SEQUENCE block_id_seq restart with 100;
+ALTER SEQUENCE dfmea_id_seq restart with 100;
+ALTER SEQUENCE factor_id_seq restart with 100;
+ALTER SEQUENCE funktion_id_seq restart with 100;
+ALTER SEQUENCE interface_id_seq restart with 100;
+ALTER SEQUENCE hibernate_sequence restart with 100;

@@ -37,7 +37,7 @@ public class BlocksResource {
     @GET
     @RolesAllowed("read")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Block> find(@PathParam("dfmeaId") String dfmeaId) {
+    public List<Block> find(@PathParam("dfmeaId") Long dfmeaId) {
         return Block.find("DFMEA_ID", dfmeaId).list();
     }
 
@@ -45,7 +45,7 @@ public class BlocksResource {
     @GET
     @RolesAllowed("read")
     @Produces(MediaType.APPLICATION_JSON)
-    public Block get(@PathParam("blockId") String blockId) {
+    public Block get(@PathParam("blockId") Long blockId) {
         Optional<Block> optional = Block.findByIdOptional(blockId);
         return optional.orElseThrow(() -> new NotFoundException());
     }
@@ -55,7 +55,7 @@ public class BlocksResource {
     @RolesAllowed("create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void save(@PathParam("dfmeaId") String dfmeaId, BlockDetail input) {
+    public void save(@PathParam("dfmeaId") Long dfmeaId, BlockDetail input) {
         bc.save(dfmeaId, input);
     }
 
@@ -65,10 +65,10 @@ public class BlocksResource {
     @RolesAllowed("update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void update(@PathParam("dfmeaId") String dfmeaId,
-            @PathParam("blockId") String blockId,
+    public void update(@PathParam("dfmeaId") Long dfmeaId,
+            @PathParam("blockId") Long blockId,
             BlockDetail input) {
-    	Block.update("name = ?1, type= ?2 where id =?3", input.getName(), input.getType(),input.getId());
+        Block.update("name = ?1, type= ?2 where id =?3", input.getName(), input.getType(), input.getId());
         bc.updateParent(get(blockId), input);
 
     }
@@ -77,8 +77,8 @@ public class BlocksResource {
     @DELETE
     @Transactional
     @RolesAllowed("delete")
-    public void delete(@PathParam("dfmeaId") String dfmeaId,
-            @PathParam("blockId") String blockId) {
+    public void delete(@PathParam("dfmeaId") Long dfmeaId,
+            @PathParam("blockId") Long blockId) {
         Block removed = Block.findById(blockId); //need to delete children also
         if (removed.isPersistent()) {
             removed.delete();
@@ -94,7 +94,7 @@ public class BlocksResource {
     @RolesAllowed("read")
     @Path("diagram")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Block> blockDiagram(@PathParam("dfmeaId") String dfmeaId) {
+    public List<Block> blockDiagram(@PathParam("dfmeaId") Long dfmeaId) {
         return Block.find("DFMEA_ID = ?1 and PARENT_BLOCK_ID IS NULL", dfmeaId).list();
     }
 
