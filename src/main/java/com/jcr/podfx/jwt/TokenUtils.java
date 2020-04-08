@@ -28,7 +28,7 @@ public class TokenUtils {
     private static final String AUDIENCE = ConfigProvider.getConfig().getValue("com.podfx.jwt.audience", String.class);
     private static final String JTI = ConfigProvider.getConfig().getValue("com.podfx.jwt.jti", String.class);
     private static final String ROLES = ConfigProvider.getConfig().getValue("com.podfx.jwt.claims.groups", String.class);
-    
+    private static final Integer EXPIRES = ConfigProvider.getConfig().getValue("com.podfx.jwt.expires", Integer.class);
     
     
     private TokenUtils() {
@@ -71,7 +71,7 @@ public class TokenUtils {
 
         long currentTimeInSecs = currentTimeInSecs();
         long exp = timeClaims != null && timeClaims.containsKey(Claims.exp.name())
-                ? timeClaims.get(Claims.exp.name()) : currentTimeInSecs + 300;
+                ? timeClaims.get(Claims.exp.name()) : currentTimeInSecs + EXPIRES;
 
         claims.issuedAt(currentTimeInSecs);
         claims.claim(Claims.auth_time.name(), currentTimeInSecs);
