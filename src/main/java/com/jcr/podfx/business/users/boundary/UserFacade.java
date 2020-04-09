@@ -38,6 +38,7 @@ public class UserFacade {
         }
         
         Credentials creds = new Credentials();
+        creds.setUsername(username);
         creds.setToken(token);
         return creds;
     }
