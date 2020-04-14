@@ -1,5 +1,6 @@
 package com.jcr.podfx.business.interfaces.control;
 
+import com.jcr.podfx.business.dfmeas.entity.Dfmea;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -11,6 +12,7 @@ import javax.persistence.EntityManager;
 
 import com.jcr.podfx.business.factors.entity.Factor;
 import com.jcr.podfx.business.funktions.boundary.FunktionFacade;
+import com.jcr.podfx.business.funktions.entity.Funktion;
 import com.jcr.podfx.business.interfaces.entity.Interface;
 import com.jcr.podfx.business.interfaces.entity.Matrix;
 
@@ -40,7 +42,18 @@ public class InterfaceController {
                 .flatMap(i -> Stream.of(i.physicalConnection, i.energyTransfer, i.materialExchange, i.dataExchange))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
-        return ff.generateFunctions(funktions);
+        
+        Dfmea dfmea = Dfmea.findById(dfmeaId);
+        
+        //need some way to determine if the function name already exists on an existing function and then not add it
+        for(String name : funktions) {
+            Funktion f = new Funktion();
+            f.name = name;
+            dfmea.addFunktion(f);
+        }
+        
+        return funktions.size();
+        
     }
 
     public void deleteInterface(Factor factor) {

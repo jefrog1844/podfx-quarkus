@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 import com.jcr.podfx.business.PodfxEntity;
 import com.jcr.podfx.business.blocks.entity.Block;
 import com.jcr.podfx.business.factors.entity.Factor;
+import com.jcr.podfx.business.funktions.entity.Funktion;
 
 @Entity
 public class Dfmea extends PodfxEntity {
@@ -39,6 +40,15 @@ public class Dfmea extends PodfxEntity {
     )
     private Set<Block> blocks = new HashSet<>();
 
+    @OneToMany(
+            mappedBy = "dfmea",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<Funktion> funktions = new HashSet<>();
+
+    
+    
     public Dfmea() {
         
     }
@@ -81,6 +91,13 @@ public class Dfmea extends PodfxEntity {
     @JsonbTransient
     public void setFactors(Set<Factor> factors) {
         this.factors = factors;
+    }
+    
+    public void addFunktion(Funktion funktion) {
+        if(funktion != null) {
+            funktions.add(funktion);
+            funktion.setDfmea(this);
+        }
     }
     
     public void update(DfmeaDetail input) {

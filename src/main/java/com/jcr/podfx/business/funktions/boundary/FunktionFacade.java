@@ -12,7 +12,7 @@ public class FunktionFacade {
     @PersistenceContext
     EntityManager em;
 
-   public int generateFunctions(List<String> funktions) {
+   public int generateFunctions(Long dfmeaId, List<String> funktions) {
         for (String f : funktions) {
 
         }
