@@ -25,6 +25,7 @@ import com.jcr.podfx.business.dfmeas.entity.Dfmea;
 import com.jcr.podfx.business.dfmeas.entity.DfmeaDetail;
 
 import io.quarkus.panache.common.Sort;
+import java.time.LocalDate;
 
 @ApplicationScoped
 @Path("/dfmeas")
@@ -33,7 +34,7 @@ public class DfmeasResource {
     @GET
     @RolesAllowed("read")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Dfmea> find() {
+    public List<Dfmea> listAll() {
         return Dfmea.listAll(Sort.by("title"));
     }
 
@@ -41,8 +42,9 @@ public class DfmeasResource {
     @Transactional
     @RolesAllowed("create")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void save(DfmeaDetail input) {
+    public void persist(DfmeaDetail input) {
         Dfmea dfmea = new Dfmea(input);
+        dfmea.originated = LocalDate.now();
         dfmea.persist();
     }
 
@@ -50,7 +52,7 @@ public class DfmeasResource {
     @GET
     @RolesAllowed("read")
     @Produces(MediaType.APPLICATION_JSON)
-    public Dfmea get(@PathParam("dfmeaId") Long id) {
+    public Dfmea findById(@PathParam("dfmeaId") Long id) {
         Optional<Dfmea> optional = Dfmea.findByIdOptional(id);
         Dfmea dfmea = optional.orElseThrow(() -> new NotFoundException());
         return dfmea;
@@ -62,7 +64,7 @@ public class DfmeasResource {
     @RolesAllowed("delete")
     @Produces(MediaType.APPLICATION_JSON)
     public void delete(@PathParam("dfmeaId") Long id) {
-        Dfmea dfmea = get(id);
+        Dfmea dfmea = findById(id);
         if (dfmea.isPersistent()) {
             dfmea.delete();
         }
@@ -72,10 +74,12 @@ public class DfmeasResource {
     @PUT
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
-    public void update(@PathParam("dfmeaId") Long dfmeaId,
+    @Produces(MediaType.APPLICATION_JSON)
+    public Dfmea update(@PathParam("dfmeaId") Long dfmeaId,
             DfmeaDetail input) {
-        Dfmea dfmea = get(dfmeaId);
+        Dfmea dfmea = findById(dfmeaId);
         dfmea.update(input);
+        return dfmea;
     }
 
     @GET
