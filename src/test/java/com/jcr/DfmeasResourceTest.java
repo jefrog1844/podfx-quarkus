@@ -28,7 +28,7 @@ public class DfmeasResourceTest {
 
     @Test
     @Order(1)
-    public void testFindEndPoint() throws Exception {
+    public void testListAllEndPoint() throws Exception {
 
         given()
                 .header("Authorization", "Bearer " + TestUtil.mockToken())
@@ -41,7 +41,7 @@ public class DfmeasResourceTest {
 
     @Test
     @Order(2)
-    public void testSaveEndpoint() throws Exception {
+    public void testPersistEndpoint() throws Exception {
         JSONObject body = new JSONObject();
         body.put("number", "FM-0100");
         body.put("title", "Wrist Watch");
@@ -62,7 +62,7 @@ public class DfmeasResourceTest {
 
     @Test
     @Order(3)
-    public void testGetEndPoint() throws Exception {
+    public void testFindByIdEndPoint() throws Exception {
 
         given()
                 .header("Authorization", "Bearer " + TestUtil.mockToken())
@@ -109,6 +109,29 @@ public class DfmeasResourceTest {
 
     @Test
     @Order(5)
+    public void testSearchEndPoint() throws Exception {
+
+        given()
+                .header("Authorization", "Bearer " + TestUtil.mockToken())
+                .when()
+                .get("dfmeas/search?title=Wrist")
+                .then()
+                .statusCode(200)
+                .body("size()", is(1))
+                .body("[0].id", equalTo(100));
+        
+        given()
+                .header("Authorization", "Bearer " + TestUtil.mockToken())
+                .when()
+                .get("dfmeas/search?title=Mouse")
+                .then()
+                .statusCode(200)
+                .body("size()", is(2));
+        
+    }
+    
+    @Test
+    @Order(6)
     public void testDeleteEndPoint() throws Exception {
 
         given()
