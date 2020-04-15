@@ -58,13 +58,4 @@ public class InterfacesResource {
                 input.getMaterialExchange(), input.getDataExchange(), input.getId());
     }
 
-    @GET
-    @Transactional
-    @RolesAllowed("read")
-    @Path("generateFunktions")
-    @Produces(MediaType.APPLICATION_JSON)
-    public int generateFunktions(@PathParam("dfmeaId") Long dfmeaId) {
-        return ic.generateFunktions(dfmeaId);
-    }
-
 };
