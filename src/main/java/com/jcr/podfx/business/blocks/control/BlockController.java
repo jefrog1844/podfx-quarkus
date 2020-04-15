@@ -17,7 +17,7 @@ import com.jcr.podfx.business.dfmeas.entity.Dfmea;
 @ApplicationScoped
 public class BlockController {
 
-    public void save(Long dfmeaId, BlockDetail input) {
+    public void persist(Long dfmeaId, BlockDetail input) {
         if (input != null) {
             Block parent = null;
             Dfmea dfmea = Dfmea.findById(dfmeaId);

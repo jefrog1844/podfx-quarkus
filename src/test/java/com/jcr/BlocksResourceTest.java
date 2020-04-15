@@ -5,6 +5,7 @@
  */
 package com.jcr;
 
+import com.jcr.podfx.business.blocks.entity.Block;
 import com.jcr.podfx.business.dfmeas.entity.Dfmea;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
@@ -24,145 +25,125 @@ import org.junit.jupiter.api.TestMethodOrder;
  */
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class DfmeasResourceTest {
+public class BlocksResourceTest {
 
     @Test
     @Order(1)
-    public void testListAllEndPoint() throws Exception {
+    public void testFindByDfmeaId() throws Exception {
 
         given()
                 .header("Authorization", "Bearer " + TestUtil.mockToken())
                 .when()
-                .get("dfmeas")
+                .get("dfmeas/{dfmeaId}/blocks", 1)
                 .then()
                 .statusCode(200)
-                .body("size()", is(5));
+                .body("size()", is(15));
     }
 
     @Test
     @Order(2)
-    public void testPersistEndpoint() throws Exception {
+    public void testPersistBlock() throws Exception {
         JSONObject body = new JSONObject();
-        body.put("number", "FM-0100");
-        body.put("title", "Wrist Watch");
-        body.put("type", "System");
-        body.put("originator", "mrogers");
-        body.put("teamMembers", "mrogers,crogers,jrogers");
-        body.put("partNumber", "WW-3000");
+        body.put("name", "Cotter Pin");
+        body.put("type", "Part");
+        body.put("dfmeaId", 1);
+        body.put("parentId", 12);
         body.put("id", 0);
         given()
                 .header("Authorization", "Bearer " + TestUtil.mockToken())
                 .contentType("application/json")
                 .when()
                 .body(body.toString())
-                .post("dfmeas")
+                .post("dfmeas/{dfmeaId}/blocks", 1)
                 .then()
                 .statusCode(204);
     }
 
     @Test
-    @Order(3)
-    public void testFindByIdEndPoint() throws Exception {
-
+    @Order(2)
+    public void testBlockGetByid() throws Exception {
         given()
                 .header("Authorization", "Bearer " + TestUtil.mockToken())
                 .when()
-                .get("dfmeas/{dfmeaId}", 100)
+                .get("dfmeas/{dfmeaId}/blocks/{blockId}", 1, 100)
                 .then()
-                .body("number", equalTo("FM-0100"))
-                .body("title", equalTo("Wrist Watch"))
-                .body("type", equalTo("System"))
-                .body("originator", equalTo("mrogers"))
-                .body("teamMembers", equalTo("mrogers,crogers,jrogers"))
-                .body("partNumber", equalTo("WW-3000"))
-                .body("id",equalTo(100))
+                .body("id", equalTo(100))
+                .body("name", equalTo("Cotter Pin"))
+                .body("type", equalTo("Part"))
                 .statusCode(200);
     }
-
+    
     @Test
-    @Order(4)
+    @Order(3)
     public void testUpdateEndPoint() throws Exception {
-        Dfmea dfmea = given()
+        JSONObject block = given()
                 .header("Authorization", "Bearer " + TestUtil.mockToken())
-                .get("dfmeas/{dfmeaId}", 100)
+                .get("dfmeas/{dfmeaId}/blocks/{blockId}", 1,100)
                 .then()
                 .statusCode(200)
-                .contentType(ContentType.JSON)
                 .body("id", equalTo(100))
+                .contentType(ContentType.JSON)
                 .extract()
-                .as(Dfmea.class);
+                .as(JSONObject.class);
         
         JSONObject body = new JSONObject();
-        body.put("id", dfmea.id);
-        body.put("number", dfmea.number);
-        body.put("title", dfmea.title);
-        body.put("type", dfmea.type);
-        body.put("originator", dfmea.originator);
-        body.put("originated", dfmea.originated.toString());
-        body.put("revised", dfmea.revised.toString());
-        body.put("teamMembers", dfmea.teamMembers);
-        body.put("partNumber", dfmea.partNumber+"-modified");
+        body.put("id", block.get("id"));
+        body.put("name", block.get("name")+" (2X)");
+        body.put("type", block.get("type"));
+        body.put("dfmeaId", 1);
+        body.put("parentId",12);
+        
         
         given()
                 .header("Authorization", "Bearer " + TestUtil.mockToken())
                 .contentType("application/json")
                 .when()
                 .body(body)
-                .put("dfmeas/{dfmeaId}", 100)
+                .put("dfmeas/{dfmeaId}/blocks/{blockId}", 1,100)
                 .then()
                 .statusCode(204);
         
         given()
                 .header("Authorization", "Bearer " + TestUtil.mockToken())
-                .get("dfmeas/{dfmeaId}", 100)
+                .when()
+                .get("dfmeas/{dfmeaId}/blocks/{blockId}", 1, 100)
                 .then()
-                .statusCode(200)
-                .contentType(ContentType.JSON)
                 .body("id", equalTo(100))
-                .body("partNumber", equalTo(dfmea.partNumber+"-modified"));
-    }
-
-    @Test
-    @Order(5)
-    public void testSearchEndPoint() throws Exception {
-
-        given()
-                .header("Authorization", "Bearer " + TestUtil.mockToken())
-                .when()
-                .get("dfmeas/search?title=Wrist")
-                .then()
-                .statusCode(200)
-                .body("size()", is(1))
-                .body("[0].id", equalTo(100));
-        
-        given()
-                .header("Authorization", "Bearer " + TestUtil.mockToken())
-                .when()
-                .get("dfmeas/search?title=Mouse")
-                .then()
-                .statusCode(200)
-                .body("size()", is(2));
-        
+                .body("name", equalTo(block.get("name")+" (2X)"))
+                .statusCode(200);
     }
     
     @Test
-    @Order(6)
+    @Order(4)
     public void testDeleteEndPoint() throws Exception {
 
         given()
                 .header("Authorization", "Bearer " + TestUtil.mockToken())
                 .when()
-                .delete("dfmeas/{dfmeaId}", 100)
+                .delete("dfmeas/{dfmeaId}/blocks/{blockId}", 1, 100)
                 .then()
                 .statusCode(204);
         
         given()
                 .header("Authorization", "Bearer " + TestUtil.mockToken())
                 .when()
-                .get("dfmeas/{dfmeaId}", 100)
+                .get("dfmeas/{dfmeaId}/blocks/{blockId}", 1,100)
                 .then()
                 .statusCode(404);
-        
+    }
+    
+    @Test
+    @Order(5)
+    public void testBlockDiagram() throws Exception {
+        given()
+                .header("Authorization", "Bearer " + TestUtil.mockToken())
+                .when()
+                .get("dfmeas/{dfmeaId}/blocks/diagram", 1)
+                .then()
+                .statusCode(200)
+                .body("size()", is(1))
+                .body("[0].id", equalTo(1))
+                .body("[0].children.size", equalTo(2));
     }
 
 }

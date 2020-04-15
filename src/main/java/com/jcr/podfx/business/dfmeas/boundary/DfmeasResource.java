@@ -75,11 +75,10 @@ public class DfmeasResource {
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Dfmea update(@PathParam("dfmeaId") Long dfmeaId,
+    public void update(@PathParam("dfmeaId") Long dfmeaId,
             DfmeaDetail input) {
         Dfmea dfmea = findById(dfmeaId);
         dfmea.update(input);
-        return dfmea;
     }
 
     @GET
