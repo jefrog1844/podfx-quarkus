@@ -1,8 +1,5 @@
 package com.jcr.podfx.business.factors.entity;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -12,9 +9,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.jcr.podfx.business.PodfxEntity;
-import com.jcr.podfx.business.blocks.entity.Block;
 import com.jcr.podfx.business.dfmeas.entity.Dfmea;
 import com.jcr.podfx.business.interfaces.entity.Interface;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Factor extends PodfxEntity {
@@ -30,46 +28,39 @@ public class Factor extends PodfxEntity {
     public static final String CATEGORY_CONTROL = "Control";
     public static final String CATEGORY_INTERNAL_INTERACTION = "Internal";
 
-    public static final String TYPE_INTERNAL = "INTERNAL";
-    public static final String TYPE_EXTERNAL = "EXTERNAL";
-    public static final String TYPE_SIGNAL = "SIGNAL";
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DFMEA_ID")
     @JsonbTransient
     private Dfmea dfmea;
-    
+
     @OneToMany(
             mappedBy = "outputFactor",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     @JsonbTransient
-    public Set<Interface> inputs = new HashSet<>();
-    
+    public List<Interface> inputs = new ArrayList<>();
+
     @OneToMany(
             mappedBy = "inputFactor",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     @JsonbTransient
-    public Set<Interface> outputs = new HashSet<>();
-    
+    public List<Interface> outputs = new ArrayList<>();
 
-    public String type;
     public String name;
     public String category;
 
     public Factor() {
-        
+
     }
-    
-    public Factor(String type, String name, String category) {
-    	this.type = type;
+
+    public Factor(String name, String category) {
         this.name = name;
         this.category = category;
     }
-    
+
     public Dfmea getDfmea() {
         return dfmea;
     }
@@ -79,7 +70,7 @@ public class Factor extends PodfxEntity {
     }
 
     public boolean isInternal() {
-        return type.equals(TYPE_INTERNAL);
+        return category.equals(CATEGORY_INTERNAL_INTERACTION);
     }
 
     public boolean isExternal() {

@@ -38,34 +38,6 @@ public abstract class PodfxEntity extends PanacheEntityBase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || !(o instanceof PodfxEntity)) {
-
-            return false;
-        }
-
-        PodfxEntity other = (PodfxEntity) o;
-
-        // if the id is missing, return false
-        if (id == null) {
-            return false;
-        }
-
-        // equivalence by id
-        return id.equals(other.id);
-    }
-
-    public int hashCode() {
-        if (id != null) {
-            return id.hashCode();
-        } else {
-            return super.hashCode();
-        }
-    }
-
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + "<" + id + ">";

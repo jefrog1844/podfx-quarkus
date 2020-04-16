@@ -37,7 +37,7 @@ public class Matrix implements Serializable {
 	}
 
 	public FactorDetail getInputFactor() {
-		return new FactorDetail(inputFactor.id, inputFactor.name, inputFactor.type, inputFactor.category,
+		return new FactorDetail(inputFactor.id, inputFactor.name, inputFactor.category,
 				inputFactor.getDfmea().id);
 	}
 

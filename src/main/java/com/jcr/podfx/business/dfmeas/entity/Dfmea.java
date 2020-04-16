@@ -1,8 +1,6 @@
 package com.jcr.podfx.business.dfmeas.entity;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
@@ -13,6 +11,9 @@ import com.jcr.podfx.business.PodfxEntity;
 import com.jcr.podfx.business.blocks.entity.Block;
 import com.jcr.podfx.business.factors.entity.Factor;
 import com.jcr.podfx.business.funktions.entity.Funktion;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 
@@ -34,75 +35,72 @@ public class Dfmea extends PodfxEntity {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private Set<Factor> factors = new HashSet<>();
+    private List<Factor> factors = new ArrayList<>();
 
     @OneToMany(
             mappedBy = "dfmea",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private Set<Block> blocks = new HashSet<>();
+    private List<Block> blocks = new ArrayList<>();
 
     @OneToMany(
             mappedBy = "dfmea",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private Set<Funktion> funktions = new HashSet<>();
+    private List<Funktion> funktions = new ArrayList<>();
 
-    
-    
     public Dfmea() {
 
     }
-    
-    
+
     public Dfmea(DfmeaDetail detail) {
-    	update(detail);
+        update(detail);
     }
-    
+
     public void addBlock(Block block) {
-    	blocks.add(block);
-    	block.setDfmea(this);
+        blocks.add(block);
+        block.setDfmea(this);
     }
-    
+
     public void addFactor(Factor factor) {
-    	factors.add(factor);
-    	factor.setDfmea(this);
+        factors.add(factor);
+        factor.setDfmea(this);
     }
-    
+
     public void removeFactor(Factor factor) {
-    	factors.remove(factor);
-    	factor.setDfmea(null);
+        factors.remove(factor);
+        factor.setDfmea(null);
     }
-    
+
     @JsonbTransient
-    public Set<Block> getBlocks() {
+    public Collection<Block> getBlocks() {
         return blocks;
     }
 
     @JsonbTransient
-    public void setBlocks(Set<Block> blocks) {
+    public void setBlocks(List<Block> blocks) {
         this.blocks = blocks;
     }
 
     @JsonbTransient
-    public Set<Factor> getFactors() {
+    public List<Factor> getFactors() {
         return factors;
     }
 
     @JsonbTransient
-    public void setFactors(Set<Factor> factors) {
+    public void setFactors(List<Factor> factors) {
         this.factors = factors;
     }
-    
+
     public void addFunktion(Funktion funktion) {
-        if(funktion != null) {
+        if (funktion != null) {
             funktions.add(funktion);
             funktion.setDfmea(this);
         }
     }
-    
+
     public void update(DfmeaDetail input) {
         this.number = input.getNumber();
         this.title = input.getTitle();
@@ -137,6 +135,5 @@ public class Dfmea extends PodfxEntity {
         }
         return true;
     }
-    
-    
+
 }

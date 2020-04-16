@@ -19,19 +19,19 @@ INSERT INTO BLOCK(id,name,type,parent_block_id,dfmea_id) VALUES (12,'Linkage Wel
 INSERT INTO BLOCK(id,name,type,parent_block_id,dfmea_id) VALUES (13,'Bushing','Part',12,1);
 INSERT INTO BLOCK(id,name,type,parent_block_id,dfmea_id) VALUES (14,'Rod','Part',12,1);
 INSERT INTO BLOCK(id,name,type,parent_block_id,dfmea_id) VALUES (15,'Clevis','Part',12,1);
-INSERT INTO FACTOR(id,name,type,category,dfmea_id) VALUES (1,'Force','SIGNAL','Signal',1);
-INSERT INTO FACTOR(id,name,type,category,dfmea_id) VALUES (2,'Motion','SIGNAL','Signal',1);
-INSERT INTO FACTOR(id,name,type,category,dfmea_id) VALUES (3,'Rod','INTERNAL','Internal',1);
-INSERT INTO FACTOR(id,name,type,category,dfmea_id) VALUES (4,'Bushing ring','INTERNAL','Internal',1);
-INSERT INTO FACTOR(id,name,type,category,dfmea_id) VALUES (5,'Clevis','INTERNAL','Internal',1);
-INSERT INTO FACTOR(id,name,type,category,dfmea_id) VALUES (6,'Salt Water','EXTERNAL','Environmental',1);
-INSERT INTO FACTOR(id,name,type,category,dfmea_id) VALUES (7,'Stone','EXTERNAL','Environmental',1);
-INSERT INTO FACTOR(id,name,type,category,dfmea_id) VALUES (8,'Molded busing,e-coat,label','EXTERNAL','System',1);
-INSERT INTO FACTOR(id,name,type,category,dfmea_id) VALUES (9,'Wheel system','EXTERNAL','System',1);
-INSERT INTO FACTOR(id,name,type,category,dfmea_id) VALUES (10,'Axle','EXTERNAL','System',1);
-INSERT INTO FACTOR(id,name,type,category,dfmea_id) VALUES (11,'Chassis','EXTERNAL','System',1);
-INSERT INTO FACTOR(id,name,type,category,dfmea_id) VALUES (12,'Rebound limit','EXTERNAL','Customer',1);
-INSERT INTO FACTOR(id,name,type,category,dfmea_id) VALUES (13,'Jounce limit','EXTERNAL','Customer',1);
+INSERT INTO FACTOR(id,name,category,dfmea_id) VALUES (1,'Force','Signal',1);
+INSERT INTO FACTOR(id,name,category,dfmea_id) VALUES (2,'Motion','Signal',1);
+INSERT INTO FACTOR(id,name,category,dfmea_id) VALUES (3,'Rod','Internal',1);
+INSERT INTO FACTOR(id,name,category,dfmea_id) VALUES (4,'Bushing ring','Internal',1);
+INSERT INTO FACTOR(id,name,category,dfmea_id) VALUES (5,'Clevis','Internal',1);
+INSERT INTO FACTOR(id,name,category,dfmea_id) VALUES (6,'Salt Water','Environmental',1);
+INSERT INTO FACTOR(id,name,category,dfmea_id) VALUES (7,'Stone','Environmental',1);
+INSERT INTO FACTOR(id,name,category,dfmea_id) VALUES (8,'Molded busing,e-coat,label','System',1);
+INSERT INTO FACTOR(id,name,category,dfmea_id) VALUES (9,'Wheel system','System',1);
+INSERT INTO FACTOR(id,name,category,dfmea_id) VALUES (10,'Axle','System',1);
+INSERT INTO FACTOR(id,name,category,dfmea_id) VALUES (11,'Chassis','System',1);
+INSERT INTO FACTOR(id,name,category,dfmea_id) VALUES (12,'Rebound limit','Customer',1);
+INSERT INTO FACTOR(id,name,category,dfmea_id) VALUES (13,'Jounce limit','Customer',1);
 INSERT INTO interface (id, dataexchange, enabled, energytransfer, materialexchange, physicalconnection, input_factor_id, output_factor_id) 
 	VALUES (1, NULL, true, 'Transfer force', 'Retain ring to rod', 'Locate rod to ring', 3, 4);
 INSERT INTO interface (id, dataexchange, enabled, energytransfer, materialexchange, physicalconnection, input_factor_id, output_factor_id) 

@@ -1,8 +1,5 @@
 package com.jcr.podfx.business.blocks.entity;
 
-import java.util.Set;
-import java.util.TreeSet;
-
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -13,6 +10,8 @@ import javax.persistence.OneToMany;
 
 import com.jcr.podfx.business.PodfxEntity;
 import com.jcr.podfx.business.dfmeas.entity.Dfmea;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Block extends PodfxEntity implements Comparable<Block> {
@@ -31,7 +30,7 @@ public class Block extends PodfxEntity implements Comparable<Block> {
     private Block parent;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Block> children = new TreeSet<>();
+    private List<Block> children = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DFMEA_ID")
@@ -56,11 +55,11 @@ public class Block extends PodfxEntity implements Comparable<Block> {
         this.dfmea = dfmea;
     }
 
-    public Set<Block> getChildren() {
+    public List<Block> getChildren() {
         return children;
     }
 
-    public void setChildren(Set<Block> children) {
+    public void setChildren(List<Block> children) {
         this.children = children;
     }
 

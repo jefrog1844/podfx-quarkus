@@ -11,7 +11,6 @@ public class FactorDetail implements Serializable {
 
     private static final long serialVersionUID = 8595328742127426385L;
     private Long id;
-    private String type;
     private String category;
     private String name;
     private Long dfmeaId;
@@ -20,20 +19,11 @@ public class FactorDetail implements Serializable {
 
     }
 
-    public FactorDetail(Long id, String name, String type, String category, Long dfmeaId) {
+    public FactorDetail(Long id, String name, String category, Long dfmeaId) {
         this.id = id;
         this.name = name;
-        this.type = type;
         this.category = category;
         this.dfmeaId = dfmeaId;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getCategory() {

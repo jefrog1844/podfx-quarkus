@@ -18,8 +18,10 @@ public class InterfaceController {
     EntityManager em;
 
     public List<Matrix> getInterfaceMatrix(Long dfmeaId) {
-        List<Factor> factors = Factor.find("type='INTERNAL' and dfmea_id=?1", dfmeaId).list();
-        return factors.stream().map(f -> new Matrix(f)).collect(Collectors.toList());
+        List<Factor> factors = Factor.find("dfmea_id=?1", dfmeaId).list();
+        return factors.stream()
+                .filter(Factor::isInternal)
+                .map(f -> new Matrix(f)).collect(Collectors.toList());
     }
 
     public void deleteInterface(Factor factor) {

@@ -37,7 +37,7 @@ public class BlocksResource {
     @GET
     @RolesAllowed("read")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Block> findBlockByDfmeaId(@PathParam("dfmeaId") Long dfmeaId) {
+    public List<Block> listAll(@PathParam("dfmeaId") Long dfmeaId) {
         return Block.find("DFMEA_ID", dfmeaId).list();
     }
 
@@ -45,7 +45,7 @@ public class BlocksResource {
     @GET
     @RolesAllowed("read")
     @Produces(MediaType.APPLICATION_JSON)
-    public Block getBlockById(@PathParam("blockId") Long blockId) {
+    public Block findById(@PathParam("blockId") Long blockId) {
         Optional<Block> optional = Block.findByIdOptional(blockId);
         return optional.orElseThrow(() -> new NotFoundException());
     }
@@ -55,7 +55,7 @@ public class BlocksResource {
     @RolesAllowed("create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void persist(@PathParam("dfmeaId") Long dfmeaId, BlockDetail input) {
+    public void create(@PathParam("dfmeaId") Long dfmeaId, BlockDetail input) {
         bc.persist(dfmeaId, input);
     }
 
@@ -69,7 +69,7 @@ public class BlocksResource {
             @PathParam("blockId") Long blockId,
             BlockDetail input) {
         Block.update("name = ?1, type= ?2 where id =?3", input.getName(), input.getType(), input.getId());
-        bc.updateParent(getBlockById(blockId), input);
+        bc.updateParent(findById(blockId), input);
     }
 
     @Path("{blockId}")

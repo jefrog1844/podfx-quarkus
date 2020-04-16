@@ -3,6 +3,7 @@ package com.jcr.podfx.business.factors.boundary;
 import com.jcr.podfx.business.factors.control.FactorController;
 import com.jcr.podfx.business.factors.entity.Factor;
 import com.jcr.podfx.business.factors.entity.FactorDetail;
+import java.util.Collection;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -33,9 +34,9 @@ public class FactorsResource {
     @GET
     @RolesAllowed("read")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<FactorDetail> find(@PathParam("dfmeaId") Long dfmeaId) {
+    public Collection<FactorDetail> listAll(@PathParam("dfmeaId") Long dfmeaId) {
         List<Factor> factors = Factor.find("DFMEA_ID", dfmeaId).list();
-        return factors.stream().map(f -> new FactorDetail(f.id, f.name, f.type, f.category, f.getDfmea().id))
+        return factors.stream().map(f -> new FactorDetail(f.id, f.name, f.category, f.getDfmea().id))
                 .collect(Collectors.toList());
     }
 
@@ -43,7 +44,7 @@ public class FactorsResource {
     @GET
     @RolesAllowed("read")
     @Produces(MediaType.APPLICATION_JSON)
-    public Factor get(@PathParam("dfmeaId") Long dfmeaId, @PathParam("factorId") Long factorId) {
+    public Factor findById(@PathParam("dfmeaId") Long dfmeaId, @PathParam("factorId") Long factorId) {
         Optional<Factor> optional = Factor.findByIdOptional(factorId);
         return optional.orElseThrow(() -> new NotFoundException());
     }
@@ -53,7 +54,7 @@ public class FactorsResource {
     @RolesAllowed("create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void save(@PathParam("dfmeaId") Long dfmeaId, FactorDetail input) {
+    public void create(@PathParam("dfmeaId") Long dfmeaId, FactorDetail input) {
         fc.save(dfmeaId, input);
     }
 
@@ -65,7 +66,7 @@ public class FactorsResource {
     @Produces(MediaType.APPLICATION_JSON)
     public void update(@PathParam("dfmeaId") Long dfmeaId, @PathParam("factorId") Long factorId,
             FactorDetail input) {
-        Factor.update("name =?1,type=?2,category=?3 where id=?4", input.getName(), input.getType(), input.getCategory(),
+        Factor.update("name =?1,category=?2 where id=?3", input.getName(), input.getCategory(),
                 input.getId());
     }
 
