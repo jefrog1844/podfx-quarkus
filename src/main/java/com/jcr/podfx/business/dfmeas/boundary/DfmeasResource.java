@@ -42,7 +42,7 @@ public class DfmeasResource {
     @Transactional
     @RolesAllowed("create")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void persist(DfmeaDetail input) {
+    public void create(DfmeaDetail input) {
         Dfmea dfmea = new Dfmea(input);
         dfmea.originated = LocalDate.now();
         dfmea.persist();

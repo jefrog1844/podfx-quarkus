@@ -13,10 +13,13 @@ import com.jcr.podfx.business.PodfxEntity;
 import com.jcr.podfx.business.blocks.entity.Block;
 import com.jcr.podfx.business.factors.entity.Factor;
 import com.jcr.podfx.business.funktions.entity.Funktion;
+import java.util.Objects;
+import javax.persistence.Column;
 
 @Entity
 public class Dfmea extends PodfxEntity {
 
+    @Column(unique = true, updatable = false, nullable = false)
     public String number;
     public String title;
     public String type;
@@ -50,7 +53,7 @@ public class Dfmea extends PodfxEntity {
     
     
     public Dfmea() {
-        
+
     }
     
     
@@ -109,5 +112,31 @@ public class Dfmea extends PodfxEntity {
         this.revised = LocalDate.now();
         this.originator = input.getOriginator();
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.number);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Dfmea other = (Dfmea) obj;
+        if (!Objects.equals(this.number, other.number)) {
+            return false;
+        }
+        return true;
+    }
+    
     
 }
