@@ -59,7 +59,7 @@ public class DfmeasResourceTest {
                 .body(body.toString())
                 .post("dfmeas")
                 .then()
-                .statusCode(204);
+                .statusCode(200);
     }
 
     @Test

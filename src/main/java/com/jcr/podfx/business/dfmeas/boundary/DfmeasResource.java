@@ -42,10 +42,12 @@ public class DfmeasResource {
     @Transactional
     @RolesAllowed("create")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void create(DfmeaDetail input) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Dfmea create(DfmeaDetail input) {
         Dfmea dfmea = new Dfmea(input);
         dfmea.originated = LocalDate.now();
-        dfmea.persist();
+        dfmea.persistAndFlush();
+        return dfmea;
     }
 
     @Path("{dfmeaId}")

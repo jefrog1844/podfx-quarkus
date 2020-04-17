@@ -17,7 +17,8 @@ import com.jcr.podfx.business.dfmeas.entity.Dfmea;
 @ApplicationScoped
 public class BlockController {
 
-    public void persist(Long dfmeaId, BlockDetail input) {
+    public Block persist(Long dfmeaId, BlockDetail input) {
+        Block block = null;
         if (input != null) {
             Block parent = null;
             Dfmea dfmea = Dfmea.findById(dfmeaId);
@@ -26,12 +27,14 @@ public class BlockController {
                 parent = optional.orElseThrow(() -> new NotFoundException());
             }
 
-            Block block = new Block(input.getName(), input.getType());
+            block = new Block(input.getName(), input.getType());
             if (parent != null) {
                 parent.addChild(block);
             }
             dfmea.addBlock(block);
+            dfmea.flush();
         }
+        return block;
     }
 
     public void updateParent(Block block, BlockDetail input) {

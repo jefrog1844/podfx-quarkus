@@ -58,7 +58,11 @@ public class BlocksResourceTest {
                 .body(body.toString())
                 .post("dfmeas/{dfmeaId}/blocks", 1)
                 .then()
-                .statusCode(204);
+                .body("name", equalTo("Cotter Pin"))
+                .body("type", equalTo("Part"))
+                .body("dfmeaId", equalTo(1))
+                .body("parentId", equalTo(12))
+                .statusCode(200);
     }
 
     @Test
@@ -72,6 +76,8 @@ public class BlocksResourceTest {
                 .body("id", equalTo(100))
                 .body("name", equalTo("Cotter Pin"))
                 .body("type", equalTo("Part"))
+                .body("dfmeaId", equalTo(1))
+                .body("parentId", equalTo(12))
                 .statusCode(200);
     }
     
@@ -93,7 +99,7 @@ public class BlocksResourceTest {
         body.put("name", block.get("name")+" (2X)");
         body.put("type", block.get("type"));
         body.put("dfmeaId", 1);
-        body.put("parentId",12);
+        body.put("parentId",8);
         
         
         given()
@@ -112,6 +118,9 @@ public class BlocksResourceTest {
                 .then()
                 .body("id", equalTo(100))
                 .body("name", equalTo(block.get("name")+" (2X)"))
+                .body("type", equalTo("Part"))
+                .body("dfmeaId", equalTo(1))
+                .body("parentId", equalTo(8))
                 .statusCode(200);
     }
     
