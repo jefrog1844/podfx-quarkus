@@ -30,8 +30,5 @@ public class BlockControllerTest {
         bd.setType(Block.PART);
         bd.setDfmeaId(Long.valueOf(1));
         bc.persist(Long.valueOf(1), bd);
-        
-        
-        
     }
 }
