@@ -1,5 +1,6 @@
 package com.jcr.podfx.business.users.boundary;
 
+import com.jcr.podfx.business.users.control.UserController;
 import javax.inject.Inject;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -17,7 +18,7 @@ import javax.ws.rs.POST;
 public class UsersResource {
 
     @Inject
-    UserFacade uf;
+    UserController uf;
 
     @POST
     @Path("/signIn")

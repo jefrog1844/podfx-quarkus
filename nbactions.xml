@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions>
         <action>
-            <actionName>CUSTOM-podfx integration test</actionName>
-            <displayName>podfx integration test</displayName>
+            <actionName>CUSTOM-podfx-integration tests</actionName>
+            <displayName>podfx-integration tests</displayName>
             <goals>
-                <goal>verify</goal>
-                
+                <goal>integration-test</goal>
             </goals>
         </action>
         <action>
-            <actionName>CUSTOM-podfx-quarkus</actionName>
-            <displayName>podfx-quarkus</displayName>
+            <actionName>CUSTOM-podfx-unit tests</actionName>
+            <displayName>podfx-unit tests</displayName>
             <goals>
-                <goal>compile</goal>
-                <goal>quarkus:dev</goal>
+                <goal>test</goal>
             </goals>
         </action>
     </actions>

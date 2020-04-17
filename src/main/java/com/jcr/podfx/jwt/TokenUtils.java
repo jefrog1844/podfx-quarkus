@@ -12,6 +12,9 @@ import org.eclipse.microprofile.jwt.Claims;
 
 import io.smallrye.jwt.build.Jwt;
 import io.smallrye.jwt.build.JwtClaimsBuilder;
+import java.security.PublicKey;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -24,13 +27,13 @@ import org.eclipse.microprofile.config.ConfigProvider;
  * Utilities for generating a JWT for testing
  */
 public class TokenUtils {
+
     private static final String ISSUER = ConfigProvider.getConfig().getValue("mp.jwt.verify.issuer", String.class);
     private static final String AUDIENCE = ConfigProvider.getConfig().getValue("com.podfx.jwt.audience", String.class);
     private static final String JTI = ConfigProvider.getConfig().getValue("com.podfx.jwt.jti", String.class);
     private static final String ROLES = ConfigProvider.getConfig().getValue("com.podfx.jwt.claims.groups", String.class);
     private static final Integer EXPIRES = ConfigProvider.getConfig().getValue("com.podfx.jwt.expires", Integer.class);
-    
-    
+
     private TokenUtils() {
         // no-op: utility class
     }
@@ -66,9 +69,8 @@ public class TokenUtils {
         claims.subject(user.getUsername());
         claims.preferredUserName(user.getFirstName());
         claims.claim("jti", JTI);
-        
-        //claims.groups(getRoles());
 
+        //claims.groups(getRoles());
         long currentTimeInSecs = currentTimeInSecs();
         long exp = timeClaims != null && timeClaims.containsKey(Claims.exp.name())
                 ? timeClaims.get(Claims.exp.name()) : currentTimeInSecs + EXPIRES;
@@ -102,6 +104,13 @@ public class TokenUtils {
         return decodePrivateKey(new String(tmp, 0, length, "UTF-8"));
     }
 
+    public static RSAPublicKey readPublicKey(final String pemResName) throws Exception {
+        InputStream contentIS = TokenUtils.class.getResourceAsStream(pemResName);
+        byte[] tmp = new byte[4096];
+        int length = contentIS.read(tmp);
+        return decodePublicKey(new String(tmp, 0, length, "UTF-8"));
+    }
+
     /**
      * Decode a PEM encoded private key string to an RSA PrivateKey
      *
@@ -115,6 +124,14 @@ public class TokenUtils {
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(encodedBytes);
         KeyFactory kf = KeyFactory.getInstance("RSA");
         return kf.generatePrivate(keySpec);
+    }
+
+    public static RSAPublicKey decodePublicKey(final String pemEncoded) throws Exception {
+        byte[] encodedBytes = toEncodedBytes(pemEncoded);
+        X509EncodedKeySpec keySpec
+                = new X509EncodedKeySpec(encodedBytes);
+        KeyFactory kf = KeyFactory.getInstance("RSA");
+        return (RSAPublicKey) kf.generatePublic(keySpec);
     }
 
     private static byte[] toEncodedBytes(final String pemEncoded) {

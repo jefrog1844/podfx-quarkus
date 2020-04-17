@@ -16,6 +16,7 @@ import static org.hamcrest.Matchers.is;
 import org.jose4j.json.internal.json_simple.JSONObject;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.TestMethodOrder;
 
 /**
@@ -23,6 +24,7 @@ import org.junit.jupiter.api.TestMethodOrder;
  * @author 019535
  */
 @QuarkusTest
+@Tag("integration")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class DfmeasResourceTest {
 
