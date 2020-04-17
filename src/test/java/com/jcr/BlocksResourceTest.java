@@ -5,13 +5,10 @@
  */
 package com.jcr;
 
-import com.jcr.podfx.business.blocks.entity.Block;
-import com.jcr.podfx.business.dfmeas.entity.Dfmea;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 import io.restassured.http.ContentType;
-import org.hamcrest.MatcherAssert;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import org.jose4j.json.internal.json_simple.JSONObject;

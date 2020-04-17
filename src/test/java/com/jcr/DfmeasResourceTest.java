@@ -10,7 +10,6 @@ import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 import io.restassured.http.ContentType;
-import org.hamcrest.MatcherAssert;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import org.jose4j.json.internal.json_simple.JSONObject;
@@ -59,6 +58,12 @@ public class DfmeasResourceTest {
                 .body(body.toString())
                 .post("dfmeas")
                 .then()
+                .body("number", equalTo("FM-0100"))
+                .body("title", equalTo("Wrist Watch"))
+                .body("type", equalTo("System"))
+                .body("originator", equalTo("mrogers"))
+                .body("teamMembers", equalTo("mrogers,crogers,jrogers"))
+                .body("partNumber", equalTo("WW-3000"))
                 .statusCode(200);
     }
 
@@ -121,6 +126,11 @@ public class DfmeasResourceTest {
                 .statusCode(200)
                 .contentType(ContentType.JSON)
                 .body("id", equalTo(100))
+                .body("number", equalTo("FM-0100"))
+                .body("title", equalTo("Wrist Watch"))
+                .body("type", equalTo("System"))
+                .body("originator", equalTo("mrogers"))
+                .body("teamMembers", equalTo("mrogers,crogers,jrogers"))
                 .body("partNumber", equalTo(dfmea.partNumber+"-modified"));
     }
 
