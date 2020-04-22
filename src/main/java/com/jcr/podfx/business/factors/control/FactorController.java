@@ -1,5 +1,6 @@
 package com.jcr.podfx.business.factors.control;
 
+import com.jcr.podfx.business.dfmeas.entity.Dfmea;
 import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -33,9 +34,12 @@ public class FactorController {
 
     @Transactional
     public void save(Long dfmeaId, FactorDetail detail) {
+        Dfmea dfmea = Dfmea.findById(dfmeaId);
         Factor output = new Factor(detail.getName(), detail.getCategory());
+        output.setDfmea(dfmea);
 
-        List<Factor> factors = Factor.find("DFMEA_ID = ?1", dfmeaId).list();
+        List<Factor> factors = Factor.find("DFMEA_ID", dfmeaId).list();
+        output.persistAndFlush();
         for (Factor input : factors) {
             if (input.isExternal() && output.isExternal()) {
                 continue;
@@ -47,6 +51,7 @@ public class FactorController {
                 createInterface(output, input);
             }
         }
+        
     }
     
     @Transactional

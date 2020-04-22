@@ -13,15 +13,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.jcr.podfx.business.interfaces.entity.Matrix;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
-import javax.ws.rs.NotFoundException;
 
 @ApplicationScoped
 @Path("/dfmeas/{dfmeaId}/interfaces")
@@ -40,20 +36,11 @@ public class InterfacesResource {
 
     @GET
     @RolesAllowed("read")
-    @Path("oldmatrix")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Matrix> getInterfaceMatrix(@PathParam("dfmeaId") Long dfmeaId) {
-        return ic.getInterfaceMatrix(dfmeaId);
-    }
-    
-    @GET
-    @RolesAllowed("read")
     @Path("matrix")
     @Produces(MediaType.APPLICATION_JSON)
-    public  Map<Factor,List<Interface>> getMatrix(@PathParam("dfmeaId") Long dfmeaId) {
+    public Map<Factor, List<Interface>> getInterfaceMatrix(@PathParam("dfmeaId") Long dfmeaId) {
         return ic.getMatrix(dfmeaId);
     }
-    
 
     @Path("{interfaceId}")
     @PUT

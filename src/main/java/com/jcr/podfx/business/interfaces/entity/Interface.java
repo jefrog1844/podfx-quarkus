@@ -7,6 +7,7 @@ import javax.persistence.ManyToOne;
 
 import com.jcr.podfx.business.PodfxEntity;
 import com.jcr.podfx.business.factors.entity.Factor;
+import java.util.Comparator;
 
 @Entity
 public class Interface extends PodfxEntity {
@@ -68,5 +69,5 @@ public class Interface extends PodfxEntity {
     public void setInputFactor(Factor inputFactor) {
         this.inputFactor = inputFactor;
     }
-
+  
 }

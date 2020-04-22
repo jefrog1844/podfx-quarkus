@@ -6,11 +6,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.jcr.podfx.business.PodfxEntity;
+import com.jcr.podfx.business.blocks.entity.Block;
 import com.jcr.podfx.business.dfmeas.entity.Dfmea;
 import java.util.Objects;
 
 @Entity
-public class Factor extends PodfxEntity {
+public class Factor extends PodfxEntity implements Comparable<Block> {
 
     public static final String CATEGORY_ENVIRONMENTAL_INTERACTION = "Environmental";
     public static final String CATEGORY_SYSTEM_INTERACTION = "System";
@@ -84,6 +85,9 @@ public class Factor extends PodfxEntity {
         return true;
     }
 
-   
+    @Override
+    public int compareTo(Block other) {
+        return this.name.compareTo(other.name);
+    }
 
 }
