@@ -1,18 +1,13 @@
 package com.jcr.podfx.business.factors.entity;
 
-import javax.json.bind.annotation.JsonbTransient;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import com.jcr.podfx.business.PodfxEntity;
 import com.jcr.podfx.business.dfmeas.entity.Dfmea;
-import com.jcr.podfx.business.interfaces.entity.Interface;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Factor extends PodfxEntity {
@@ -30,24 +25,7 @@ public class Factor extends PodfxEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DFMEA_ID")
-    @JsonbTransient
     private Dfmea dfmea;
-
-    @OneToMany(
-            mappedBy = "outputFactor",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    @JsonbTransient
-    public List<Interface> inputs = new ArrayList<>();
-
-    @OneToMany(
-            mappedBy = "inputFactor",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    @JsonbTransient
-    public List<Interface> outputs = new ArrayList<>();
 
     public String name;
     public String category;
@@ -76,5 +54,36 @@ public class Factor extends PodfxEntity {
     public boolean isExternal() {
         return !isInternal();
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 47 * hash + Objects.hashCode(this.name);
+        hash = 47 * hash + Objects.hashCode(this.category);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Factor other = (Factor) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.category, other.category)) {
+            return false;
+        }
+        return true;
+    }
+
+   
 
 }

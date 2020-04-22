@@ -1,17 +1,13 @@
 package com.jcr.podfx.business.dfmeas.boundary;
 
+import com.jcr.podfx.business.dfmeas.control.DfmeaController;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
-import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -24,75 +20,62 @@ import javax.ws.rs.core.UriInfo;
 import com.jcr.podfx.business.dfmeas.entity.Dfmea;
 import com.jcr.podfx.business.dfmeas.entity.DfmeaDetail;
 
-import io.quarkus.panache.common.Sort;
-import java.time.LocalDate;
+import javax.inject.Inject;
 
 @ApplicationScoped
 @Path("/dfmeas")
 public class DfmeasResource {
-
+    
+    @Inject
+    DfmeaController dc;
+    
     @GET
     @RolesAllowed("read")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Dfmea> listAll() {
-        return Dfmea.listAll(Sort.by("title"));
+        return dc.listAll();
     }
-
+    
     @POST
-    @Transactional
     @RolesAllowed("create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Dfmea create(DfmeaDetail input) {
-        Dfmea dfmea = new Dfmea(input);
-        dfmea.originated = LocalDate.now();
-        dfmea.persistAndFlush();
-        return dfmea;
+        return dc.create(input);
     }
-
+    
     @Path("{dfmeaId}")
     @GET
     @RolesAllowed("read")
     @Produces(MediaType.APPLICATION_JSON)
     public Dfmea findById(@PathParam("dfmeaId") Long id) {
-        Optional<Dfmea> optional = Dfmea.findByIdOptional(id);
-        Dfmea dfmea = optional.orElseThrow(() -> new NotFoundException());
-        return dfmea;
+        return dc.findById(id);
     }
-
+    
     @Path("{dfmeaId}")
     @DELETE
-    @Transactional
     @RolesAllowed("delete")
     @Produces(MediaType.APPLICATION_JSON)
     public void delete(@PathParam("dfmeaId") Long id) {
-        Dfmea dfmea = findById(id);
-        if (dfmea.isPersistent()) {
-            dfmea.delete();
-        }
+        dc.delete(id);
     }
-
+    
     @Path("{dfmeaId}")
     @PUT
-    @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public void update(@PathParam("dfmeaId") Long dfmeaId,
             DfmeaDetail input) {
-        Dfmea dfmea = findById(dfmeaId);
-        dfmea.update(input);
+        dc.update(dfmeaId, input);
     }
-
+    
     @GET
     @Path("search")
     @RolesAllowed("read")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Dfmea> search(@Context UriInfo info) {
         String title = info.getQueryParameters().getFirst("title");
-        Stream<Dfmea> dfmeas = Dfmea.streamAll();
-        return dfmeas.
-                filter(d -> d.title.toLowerCase().contains(title.toLowerCase())).
-                collect(Collectors.toList());
+        return dc.search(title);
     }
-
+    
 }

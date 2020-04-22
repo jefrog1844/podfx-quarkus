@@ -1,5 +1,6 @@
 package com.jcr.podfx.business.interfaces.boundary;
 
+import com.jcr.podfx.business.factors.entity.Factor;
 import com.jcr.podfx.business.interfaces.control.InterfaceController;
 import com.jcr.podfx.business.interfaces.entity.Interface;
 import com.jcr.podfx.business.interfaces.entity.InterfaceDetail;
@@ -14,6 +15,8 @@ import javax.ws.rs.core.MediaType;
 
 import com.jcr.podfx.business.interfaces.entity.Matrix;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
@@ -32,17 +35,25 @@ public class InterfacesResource {
     @RolesAllowed("read")
     @Produces(MediaType.APPLICATION_JSON)
     public Interface getInterface(@PathParam("interfaceId") Long interfaceId) {
-        Optional<Interface> optional = Interface.findByIdOptional(interfaceId);
-        return optional.orElseThrow(() -> new NotFoundException());
+        return ic.getInterface(interfaceId);
     }
 
     @GET
     @RolesAllowed("read")
-    @Path("matrix")
+    @Path("oldmatrix")
     @Produces(MediaType.APPLICATION_JSON)
-    public Collection<Matrix> getInterfaceMatrix(@PathParam("dfmeaId") Long dfmeaId) {
+    public List<Matrix> getInterfaceMatrix(@PathParam("dfmeaId") Long dfmeaId) {
         return ic.getInterfaceMatrix(dfmeaId);
     }
+    
+    @GET
+    @RolesAllowed("read")
+    @Path("matrix")
+    @Produces(MediaType.APPLICATION_JSON)
+    public  Map<Factor,List<Interface>> getMatrix(@PathParam("dfmeaId") Long dfmeaId) {
+        return ic.getMatrix(dfmeaId);
+    }
+    
 
     @Path("{interfaceId}")
     @PUT

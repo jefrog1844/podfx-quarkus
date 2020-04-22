@@ -15,7 +15,6 @@ import javax.ws.rs.core.MediaType;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
-import javax.transaction.Transactional;
 
 @ApplicationScoped
 @Path("/dfmeas/{dfmeaId}/funktions")
@@ -25,7 +24,6 @@ public class FunktionsResource {
     FunktionController fc;
 
     @GET
-    @Transactional
     @RolesAllowed("read")
     @Path("generateFunktions")
     @Produces(MediaType.APPLICATION_JSON)

@@ -1,16 +1,13 @@
 package com.jcr.podfx.business.blocks.boundary;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -38,7 +35,7 @@ public class BlocksResource {
     @RolesAllowed("read")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Block> listAll(@PathParam("dfmeaId") Long dfmeaId) {
-        return Block.find("DFMEA_ID", dfmeaId).list();
+        return bc.listAll(dfmeaId);
     }
 
     @Path("{blockId}")
@@ -46,12 +43,10 @@ public class BlocksResource {
     @RolesAllowed("read")
     @Produces(MediaType.APPLICATION_JSON)
     public Block findById(@PathParam("blockId") Long blockId) {
-        Optional<Block> optional = Block.findByIdOptional(blockId);
-        return optional.orElseThrow(() -> new NotFoundException());
+        return bc.findById(blockId);
     }
 
     @POST
-    @Transactional
     @RolesAllowed("create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -61,27 +56,21 @@ public class BlocksResource {
 
     @Path("{blockId}")
     @PUT
-    @Transactional
     @RolesAllowed("update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public void update(@PathParam("dfmeaId") Long dfmeaId,
             @PathParam("blockId") Long blockId,
             BlockDetail input) {
-        Block.update("name = ?1, type= ?2 where id =?3", input.getName(), input.getType(), input.getId());
-        bc.updateParent(findById(blockId), input);
+        bc.update(input);
     }
 
     @Path("{blockId}")
     @DELETE
-    @Transactional
     @RolesAllowed("delete")
     public void delete(@PathParam("dfmeaId") Long dfmeaId,
             @PathParam("blockId") Long blockId) {
-        Block removed = Block.findById(blockId); //need to delete children also
-        if (removed.isPersistent()) {
-            removed.delete();
-        }
+        bc.delete(blockId);
     }
 
     /**
@@ -94,7 +83,7 @@ public class BlocksResource {
     @Path("diagram")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Block> blockDiagram(@PathParam("dfmeaId") Long dfmeaId) {
-        return Block.find("DFMEA_ID = ?1 and PARENT_BLOCK_ID IS NULL", dfmeaId).list();
+        return bc.blockDiagram(dfmeaId);
     }
 
 }

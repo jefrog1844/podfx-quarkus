@@ -1,6 +1,5 @@
 package com.jcr.podfx.business.interfaces.entity;
 
-import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -19,12 +18,10 @@ public class Interface extends PodfxEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "OUTPUT_FACTOR_ID", nullable = true)
-    @JsonbTransient
     private Factor outputFactor;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "INPUT_FACTOR_ID")
-    @JsonbTransient
     private Factor inputFactor;
 
     public boolean enabled;
@@ -34,15 +31,16 @@ public class Interface extends PodfxEntity {
     public String materialExchange;
 
     public Interface() {
-        
+
     }
-    
+
     public Interface(Factor inputFactor, Factor outputFactor, boolean enabled) {
-    	this.inputFactor = inputFactor;
+        this.inputFactor = inputFactor;
         this.outputFactor = outputFactor;
         this.enabled = enabled;
-                
+
     }
+
     public boolean isInternal() {
         return Boolean.logicalAnd(inputFactor.isInternal(), outputFactor.isInternal());
     }
@@ -70,5 +68,5 @@ public class Interface extends PodfxEntity {
     public void setInputFactor(Factor inputFactor) {
         this.inputFactor = inputFactor;
     }
-    
+
 }

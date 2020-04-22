@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 import com.jcr.podfx.business.factors.entity.Factor;
 import com.jcr.podfx.business.factors.entity.FactorDetail;
+import java.util.HashSet;
 
 /**
  *
@@ -51,8 +52,8 @@ public class Matrix implements Serializable {
 
 	private Set<Map<String, Object>> buildResponse(boolean internal) {
 		Predicate<Interface> p = getInternalPredicate(internal);
-		Set<Interface> interfaces = inputFactor.outputs.stream().filter(p).collect(Collectors.toSet());
-		return initiateInterfaceMap(interfaces);
+		//Set<Interface> interfaces = inputFactor.outputs.stream().filter(p).collect(Collectors.toSet());
+		return initiateInterfaceMap(new HashSet<>());
 	}
 
 	private Set<Map<String, Object>> initiateInterfaceMap(Set<Interface> interfaces) {

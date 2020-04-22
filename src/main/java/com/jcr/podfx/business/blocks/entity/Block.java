@@ -1,17 +1,17 @@
 package com.jcr.podfx.business.blocks.entity;
 
 import javax.json.bind.annotation.JsonbTransient;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import com.jcr.podfx.business.PodfxEntity;
 import com.jcr.podfx.business.dfmeas.entity.Dfmea;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import javax.persistence.Transient;
 
 @Entity
 public class Block extends PodfxEntity implements Comparable<Block> {
@@ -25,19 +25,19 @@ public class Block extends PodfxEntity implements Comparable<Block> {
     public String name;
     public String type;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_BLOCK_ID", nullable = true)
     private Block parent;
-
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Block> children = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DFMEA_ID")
     private Dfmea dfmea;
+    
+    @Transient
+    private List<Block> children;
 
     public Block() {
-
+        children = new ArrayList<>();
     }
 
     public Block(String name, String type) {
@@ -46,7 +46,6 @@ public class Block extends PodfxEntity implements Comparable<Block> {
         this.type = type;
     }
 
-    @JsonbTransient
     public Dfmea getDfmea() {
         return dfmea;
     }
@@ -55,23 +54,10 @@ public class Block extends PodfxEntity implements Comparable<Block> {
         this.dfmea = dfmea;
     }
 
-    public List<Block> getChildren() {
-        return children;
+    public Long getDfmeaId() {
+        return dfmea.id;
     }
-
-    public void setChildren(List<Block> children) {
-        this.children = children;
-    }
-
-    public void addChild(Block child) {
-        this.children.add(child);
-        child.setParent(this);
-    }
-
-    public void removeChild(Block block) {
-        children.remove(block);
-    }
-
+    
     @JsonbTransient
     public Block getParent() {
         return parent;
@@ -84,13 +70,47 @@ public class Block extends PodfxEntity implements Comparable<Block> {
     public Long getParentId() {
         return parent == null ? Long.valueOf(0) : parent.id;
     }
-
-    public Long getDfmeaId() {
-        return dfmea == null ? null : dfmea.id;
+    public void addChild(Block block) {
+        children.add(block);
+        //block.setParent(this);
     }
-
+    
+    public List<Block> getChildren() {
+        return children;
+    }
+    
     @Override
     public int compareTo(Block o) {
         return this.id.compareTo(o.id);
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 17 * hash + Objects.hashCode(this.name);
+        hash = 17 * hash + Objects.hashCode(this.type);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Block other = (Block) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.type, other.type)) {
+            return false;
+        }
+        return true;
+    }
+
 }

@@ -17,6 +17,7 @@ import javax.persistence.EntityManager;
 
 import com.jcr.podfx.business.funktions.entity.Funktion;
 import com.jcr.podfx.business.interfaces.entity.Interface;
+import javax.transaction.Transactional;
 
 @ApplicationScoped
 public class FunktionController {
@@ -24,6 +25,7 @@ public class FunktionController {
     @Inject
     EntityManager em;
 
+    @Transactional
     public int generateFunktions(Long dfmeaId) {
         List<Interface> interfaces = em.createQuery(
                 "select i from Interface i " + "JOIN Factor fInput on fInput.id = i.inputFactor.id "
@@ -42,7 +44,7 @@ public class FunktionController {
         for (String name : funktions) {
             Funktion f = new Funktion();
             f.name = name;
-            dfmea.addFunktion(f);
+            f.setDfmea(dfmea);
         }
 
         return funktions.size();

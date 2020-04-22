@@ -30,75 +30,12 @@ public class Dfmea extends PodfxEntity {
     public String teamMembers;
     public String partNumber;
 
-    @OneToMany(
-            mappedBy = "dfmea",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<Factor> factors = new ArrayList<>();
-
-    @OneToMany(
-            mappedBy = "dfmea",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<Block> blocks = new ArrayList<>();
-
-    @OneToMany(
-            mappedBy = "dfmea",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<Funktion> funktions = new ArrayList<>();
-
     public Dfmea() {
 
     }
 
     public Dfmea(DfmeaDetail detail) {
         update(detail);
-    }
-
-    public void addBlock(Block block) {
-        blocks.add(block);
-        block.setDfmea(this);
-    }
-
-    public void addFactor(Factor factor) {
-        factors.add(factor);
-        factor.setDfmea(this);
-    }
-
-    public void removeFactor(Factor factor) {
-        factors.remove(factor);
-        factor.setDfmea(null);
-    }
-
-    @JsonbTransient
-    public Collection<Block> getBlocks() {
-        return blocks;
-    }
-
-    @JsonbTransient
-    public void setBlocks(List<Block> blocks) {
-        this.blocks = blocks;
-    }
-
-    @JsonbTransient
-    public List<Factor> getFactors() {
-        return factors;
-    }
-
-    @JsonbTransient
-    public void setFactors(List<Factor> factors) {
-        this.factors = factors;
-    }
-
-    public void addFunktion(Funktion funktion) {
-        if (funktion != null) {
-            funktions.add(funktion);
-            funktion.setDfmea(this);
-        }
     }
 
     public void update(DfmeaDetail input) {
