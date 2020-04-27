@@ -39,12 +39,7 @@ public class BlockController {
             block = new Block(input.getName(), input.getType());
 
             //set parent
-            Block parent = null;
-            if (input.getParentId() != null && !input.getParentId().equals(Long.valueOf(0))) {
-                Optional<Block> optional = Block.findByIdOptional(input.getParentId());
-                parent = optional.orElseThrow(() -> new NotFoundException());
-            }
-            block.setParent(parent);
+            updateParent(block, input.getParentId());
 
             //set Dfmea
             Dfmea dfmea = Dfmea.findById(dfmeaId);
@@ -56,9 +51,25 @@ public class BlockController {
 
     @Transactional
     public void update(BlockDetail input) {
-        Block.update("name = ?1, type= ?2, PARENT_BLOCK_ID=?3 where id =?4", input.getName(), input.getType(), input.getParentId(), input.getId());
+        Block block = findById(input.getId());
+        block.name = input.getName();
+        block.type = input.getType();
+        
+        //set parent
+        updateParent(block, input.getParentId());
+        
     }
 
+    private void updateParent(Block block, Long parentId) {
+        Block parent = null;
+        if (parentId != null && !parentId.equals(Long.valueOf(0))) {
+            Optional<Block> optional = Block.findByIdOptional(parentId);
+            parent = optional.orElseThrow(() -> new NotFoundException());
+        }
+        block.setParent(parent);
+     }
+    
+    
     @Transactional
     public void delete(Long blockId) {
         Block.delete("PARENT_BLOCK_ID", blockId);
@@ -77,7 +88,7 @@ public class BlockController {
     }
 
     private Block buildBlockDiagram(List<Block> blocks) {
-        Map<Long,Block> blockMap = new HashMap<>();
+        Map<Long, Block> blockMap = new HashMap<>();
         Block root = null;
         for (Block b : blocks) {
             if (b.getParent() == null) {
@@ -85,9 +96,9 @@ public class BlockController {
             }
             blockMap.put(b.id, b);
         }
-        
-        for(Block current : blocks) {
-            if(current.getParent() != null) {
+
+        for (Block current : blocks) {
+            if (current.getParent() != null) {
                 Block parent = blockMap.get(current.getParent().id);
                 parent.addChild(current);
             }
