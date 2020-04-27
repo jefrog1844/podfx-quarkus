@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import com.jcr.podfx.business.PodfxEntity;
 import com.jcr.podfx.business.dfmeas.entity.Dfmea;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Transient;
@@ -76,6 +77,7 @@ public class Block extends PodfxEntity implements Comparable<Block> {
     }
     
     public List<Block> getChildren() {
+        Collections.sort(children);
         return children;
     }
     
