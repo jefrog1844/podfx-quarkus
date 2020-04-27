@@ -70,7 +70,6 @@ public class Block extends PodfxEntity implements Comparable<Block> {
 
     public Long getParentId() {
         return parent == null ? Long.valueOf(0) : parent.id;
-        //return parent == null ? null : parent.id;
     }
     public void addChild(Block block) {
         children.add(block);
