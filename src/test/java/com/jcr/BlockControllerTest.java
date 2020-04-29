@@ -10,6 +10,7 @@ import com.jcr.podfx.business.blocks.entity.Block;
 import com.jcr.podfx.business.blocks.entity.BlockDetail;
 import io.quarkus.test.junit.QuarkusTest;
 import javax.transaction.Transactional;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -29,6 +30,10 @@ public class BlockControllerTest {
         bd.setParentId(Long.valueOf(12));
         bd.setType(Block.PART);
         bd.setDfmeaId(Long.valueOf(1));
-        bc.persist(Long.valueOf(1), bd);
+        Block block = bc.persist(Long.valueOf(1), bd);
+        Assertions.assertEquals(block.name, "Cotter Pin");
+        Assertions.assertEquals(block.type, Block.PART);
+        Assertions.assertEquals(Long.valueOf(1), block.getDfmea().id);
+        Assertions.assertEquals(Long.valueOf(12), block.getParent().id);
     }
 }

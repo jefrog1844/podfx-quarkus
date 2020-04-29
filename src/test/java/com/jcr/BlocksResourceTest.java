@@ -55,10 +55,6 @@ public class BlocksResourceTest {
                 .body(body.toString())
                 .post("dfmeas/{dfmeaId}/blocks", 1)
                 .then()
-                .body("name", equalTo("Cotter Pin"))
-                .body("type", equalTo("Part"))
-                .body("dfmeaId", equalTo(1))
-                .body("parentId", equalTo(12))
                 .statusCode(200);
     }
 
