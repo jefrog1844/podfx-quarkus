@@ -44,7 +44,7 @@ public class BlockController {
             //set Dfmea
             Dfmea dfmea = Dfmea.findById(dfmeaId);
             block.setDfmea(dfmea);
-            block.persist();
+            block.persistAndFlush();
         }
         return block;
     }
