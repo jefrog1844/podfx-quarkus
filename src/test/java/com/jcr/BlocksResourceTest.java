@@ -5,10 +5,12 @@
  */
 package com.jcr;
 
+import com.jcr.podfx.business.blocks.entity.BlockDetail;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 import io.restassured.http.ContentType;
+import javax.transaction.Transactional;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import org.jose4j.json.internal.json_simple.JSONObject;
@@ -24,6 +26,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 @QuarkusTest
 @Tag("integration")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Transactional
 public class BlocksResourceTest {
 
     @Test
@@ -48,75 +51,58 @@ public class BlocksResourceTest {
         body.put("dfmeaId", 1);
         body.put("parentId", 12);
         body.put("id", 0);
-        given()
+        BlockDetail detail = given()
                 .header("Authorization", "Bearer " + TestUtil.mockToken())
                 .contentType("application/json")
                 .when()
                 .body(body.toString())
                 .post("dfmeas/{dfmeaId}/blocks", 1)
                 .then()
-                .statusCode(200);
+                .statusCode(200).extract().as(BlockDetail.class);
     }
 
-    @Test
-    @Order(2)
-    public void testBlockGetByid() throws Exception {
-        given()
-                .header("Authorization", "Bearer " + TestUtil.mockToken())
-                .when()
-                .get("dfmeas/{dfmeaId}/blocks/{blockId}", 1, 100)
-                .then()
-                .body("id", equalTo(100))
-                .body("name", equalTo("Cotter Pin"))
-                .body("type", equalTo("Part"))
-                .body("dfmeaId", equalTo(1))
-                .body("parentId", equalTo(12))
-                .statusCode(200);
-    }
-    
     @Test
     @Order(3)
     public void testUpdateEndPoint() throws Exception {
         JSONObject block = given()
                 .header("Authorization", "Bearer " + TestUtil.mockToken())
-                .get("dfmeas/{dfmeaId}/blocks/{blockId}", 1,100)
+                .get("dfmeas/{dfmeaId}/blocks/{blockId}", 1, 100)
                 .then()
                 .statusCode(200)
                 .body("id", equalTo(100))
                 .contentType(ContentType.JSON)
                 .extract()
                 .as(JSONObject.class);
-        
+
         JSONObject body = new JSONObject();
         body.put("id", block.get("id"));
-        body.put("name", block.get("name")+" (2X)");
+        body.put("name", block.get("name") + " (2X)");
         body.put("type", block.get("type"));
         body.put("dfmeaId", 1);
-        body.put("parentId",8);
-        
-        
+        body.put("parentId", 8);
+
         given()
                 .header("Authorization", "Bearer " + TestUtil.mockToken())
                 .contentType("application/json")
                 .when()
                 .body(body)
-                .put("dfmeas/{dfmeaId}/blocks/{blockId}", 1,100)
+                .put("dfmeas/{dfmeaId}/blocks/{blockId}", 1, 100)
                 .then()
                 .statusCode(204);
-        
+
         given()
                 .header("Authorization", "Bearer " + TestUtil.mockToken())
                 .when()
                 .get("dfmeas/{dfmeaId}/blocks/{blockId}", 1, 100)
                 .then()
                 .body("id", equalTo(100))
-                .body("name", equalTo(block.get("name")+" (2X)"))
+                .body("name", equalTo(block.get("name") + " (2X)"))
                 .body("type", equalTo("Part"))
                 .body("dfmeaId", equalTo(1))
                 .body("parentId", equalTo(8))
                 .statusCode(200);
     }
-    
+
     @Test
     @Order(4)
     public void testDeleteEndPoint() throws Exception {
@@ -127,15 +113,15 @@ public class BlocksResourceTest {
                 .delete("dfmeas/{dfmeaId}/blocks/{blockId}", 1, 100)
                 .then()
                 .statusCode(204);
-        
+
         given()
                 .header("Authorization", "Bearer " + TestUtil.mockToken())
                 .when()
-                .get("dfmeas/{dfmeaId}/blocks/{blockId}", 1,100)
+                .get("dfmeas/{dfmeaId}/blocks/{blockId}", 1, 100)
                 .then()
                 .statusCode(404);
     }
-    
+
     @Test
     @Order(5)
     public void testBlockDiagram() throws Exception {

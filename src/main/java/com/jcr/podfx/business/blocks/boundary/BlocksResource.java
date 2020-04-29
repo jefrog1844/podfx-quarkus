@@ -50,7 +50,7 @@ public class BlocksResource {
     @RolesAllowed("create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Block create(@PathParam("dfmeaId") Long dfmeaId, BlockDetail input) {
+    public BlockDetail create(@PathParam("dfmeaId") Long dfmeaId, BlockDetail input) {
         return bc.persist(dfmeaId, input);
     }
 

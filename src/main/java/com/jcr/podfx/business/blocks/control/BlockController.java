@@ -32,7 +32,7 @@ public class BlockController {
     }
 
     @Transactional
-    public Block persist(Long dfmeaId, BlockDetail input) {
+    public BlockDetail persist(Long dfmeaId, BlockDetail input) {
         Block block = null;
         if (input != null) {
             //create new Block
@@ -46,7 +46,8 @@ public class BlockController {
             block.setDfmea(dfmea);
             block.persistAndFlush();
         }
-        return block;
+        input.setId(block.id);
+        return input;
     }
 
     @Transactional

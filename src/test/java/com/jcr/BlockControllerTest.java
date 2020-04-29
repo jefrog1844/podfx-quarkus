@@ -19,21 +19,22 @@ import org.junit.jupiter.api.Test;
  */
 @QuarkusTest
 public class BlockControllerTest {
-    
+
     @Test
     @Transactional
     public void testPersist() {
+        Long dfmeaId = Long.valueOf(1);
         BlockController bc = new BlockController();
         BlockDetail bd = new BlockDetail();
         bd.setId(Long.valueOf(0));
         bd.setName("Cotter Pin");
         bd.setParentId(Long.valueOf(12));
         bd.setType(Block.PART);
-        bd.setDfmeaId(Long.valueOf(1));
-        Block block = bc.persist(Long.valueOf(1), bd);
-        Assertions.assertEquals(block.name, "Cotter Pin");
-        Assertions.assertEquals(block.type, Block.PART);
-        Assertions.assertEquals(Long.valueOf(1), block.getDfmea().id);
-        Assertions.assertEquals(Long.valueOf(12), block.getParent().id);
+        bd.setDfmeaId(dfmeaId);
+        BlockDetail block = bc.persist(dfmeaId, bd);
+        Assertions.assertEquals("Cotter Pin", block.getName());
+        Assertions.assertEquals(Block.PART, block.getType());
+        Assertions.assertEquals(Long.valueOf(1), block.getDfmeaId());
+        Assertions.assertEquals(Long.valueOf(12), block.getParentId());
     }
 }
