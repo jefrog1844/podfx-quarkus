@@ -45,6 +45,7 @@ public class FunktionController {
             Funktion f = new Funktion();
             f.name = name;
             f.setDfmea(dfmea);
+            f.persist();
         }
 
         return funktions.size();
