@@ -11,6 +11,7 @@ public class FunktionDetail implements Serializable {
     private Long id;
     private String name;
     private Long dfmeaId;
+    private String requirement;
     
     public FunktionDetail() {
         
@@ -44,6 +45,14 @@ public class FunktionDetail implements Serializable {
 
     public void setDfmeaId(Long dfmeaId) {
         this.dfmeaId = dfmeaId;
+    }
+
+    public String getRequirement() {
+        return requirement;
+    }
+
+    public void setRequirement(String requirement) {
+        this.requirement = requirement;
     }
 
     
