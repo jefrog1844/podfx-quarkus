@@ -57,17 +57,14 @@ public class FunktionsResource {
     @RolesAllowed("update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void update(@PathParam("dfmeaId") Long dfmeaId,
-            @PathParam("funktionId") Long funktionId,
-            FunktionDetail input) {
+    public void update(FunktionDetail input) {
         fc.update(input);
     }
     
     @Path("{funktionId}")
     @DELETE
     @RolesAllowed("delete")
-    public void delete(@PathParam("dfmeaId") Long dfmeaId,
-            @PathParam("funktionId") Long funktionId) {
+    public void delete(@PathParam("funktionId") Long funktionId) {
         fc.delete(funktionId);
     }
 }
