@@ -32,7 +32,6 @@ public class FailureMode extends PodfxEntity {
 
     }
 
-    @JsonbTransient
     public Funktion getFunktion() {
         return funktion;
     }

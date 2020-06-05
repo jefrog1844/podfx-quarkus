@@ -56,4 +56,4 @@ public class InterfacesResource {
                 input.getMaterialExchange(), input.getDataExchange(), input.getId());
     }
 
-};
+}
