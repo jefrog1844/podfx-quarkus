@@ -2,20 +2,19 @@ package com.jcr.podfx.business.dfmeas.entity;
 
 import java.time.LocalDate;
 
-import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
 import com.jcr.podfx.business.PodfxEntity;
-import com.jcr.podfx.business.blocks.entity.Block;
-import com.jcr.podfx.business.factors.entity.Factor;
 import com.jcr.podfx.business.funktions.entity.Funktion;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.Column;
+import javax.persistence.JoinColumn;
 
 @Entity
 public class Dfmea extends PodfxEntity {
@@ -29,6 +28,10 @@ public class Dfmea extends PodfxEntity {
     public LocalDate revised;
     public String teamMembers;
     public String partNumber;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "DFMEA_ID")
+    private Set<Funktion> funktions = new HashSet<>();
 
     public Dfmea() {
 
@@ -46,6 +49,14 @@ public class Dfmea extends PodfxEntity {
         this.partNumber = input.getPartNumber();
         this.revised = LocalDate.now();
         this.originator = input.getOriginator();
+    }
+
+    public Set<Funktion> getFunktions() {
+        return funktions;
+    }
+
+    public void setFunktions(Set<Funktion> funktions) {
+        this.funktions = funktions;
     }
 
     @Override

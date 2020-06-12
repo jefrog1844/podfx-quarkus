@@ -46,10 +46,8 @@ public class FunktionController {
 
         //need some way to determine if the function name already exists on an existing function and then not add it
         for (String name : funktions) {
-            Funktion f = new Funktion();
-            f.name = name;
-            f.setDfmea(dfmea);
-            f.persist();
+            Funktion f = new Funktion(name);
+            dfmea.getFunktions().add(f);
         }
 
         return funktions.size();

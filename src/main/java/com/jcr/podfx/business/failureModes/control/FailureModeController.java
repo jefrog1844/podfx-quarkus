@@ -5,6 +5,7 @@
  */
 package com.jcr.podfx.business.failureModes.control;
 
+import com.jcr.podfx.business.dfmeas.entity.Dfmea;
 import com.jcr.podfx.business.failureModes.entity.FailureMode;
 import java.util.List;
 import java.util.stream.Stream;
@@ -15,7 +16,10 @@ import javax.persistence.EntityManager;
 
 import com.jcr.podfx.business.funktions.entity.Funktion;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import static java.util.stream.Collectors.groupingBy;
+import javax.ws.rs.NotFoundException;
 
 @ApplicationScoped
 public class FailureModeController {
@@ -23,17 +27,5 @@ public class FailureModeController {
     @Inject
     EntityManager em;
 
-    public Map<Funktion, List<FailureMode>> getMatrix(Long dfmeaId) {
-
-        Stream<FailureMode> fmodes = em.createQuery("select fm from FailureMode fm "
-                + "JOIN Funktion f on f.id = fm.funktion.id "
-                + "where f.dfmea.id = :dfmeaId", FailureMode.class).
-                setParameter("dfmeaId", dfmeaId).
-                getResultList().stream();
-
-        Map<Funktion, List<FailureMode>> matrix = fmodes
-                .collect(groupingBy(FailureMode::getFunktion));
-        return matrix;
-    }
-
+    
 }
