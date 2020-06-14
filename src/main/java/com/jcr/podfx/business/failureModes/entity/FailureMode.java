@@ -52,6 +52,14 @@ public class FailureMode extends PodfxEntity {
         this.causes = causes;
     }
 
+    public List<Effect> getEffects() {
+        return effects;
+    }
+
+    public void setEffects(List<Effect> effects) {
+        this.effects = effects;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
