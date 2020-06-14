@@ -5,11 +5,15 @@
  */
 package com.jcr.podfx.business.controls.entity;
 
+import com.jcr.podfx.business.PodfxEntity;
+import javax.persistence.Entity;
+
 /**
  *
  * @author jeffrogers
  */
-public class Control {
+@Entity 
+public class Control extends PodfxEntity {
     public static final String PREVENTION = "PREVENTION";
     public static final String DETECTION = "DETECTION";
     

@@ -6,11 +6,13 @@
 package com.jcr.podfx.business.effects.entity;
 
 import com.jcr.podfx.business.PodfxEntity;
+import javax.persistence.Entity;
 
 /**
  *
  * @author jeffrogers
  */
+@Entity 
 public class Effect extends PodfxEntity {
     public String name;
     public Integer severity;
