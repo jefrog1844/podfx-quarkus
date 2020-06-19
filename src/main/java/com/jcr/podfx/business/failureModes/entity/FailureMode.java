@@ -1,6 +1,7 @@
 package com.jcr.podfx.business.failureModes.entity;
 
 import com.jcr.podfx.business.PodfxEntity;
+import com.jcr.podfx.business.actions.entity.Action;
 import com.jcr.podfx.business.causes.entity.Cause;
 import com.jcr.podfx.business.effects.entity.Effect;
 import java.util.ArrayList;
@@ -30,10 +31,14 @@ public class FailureMode extends PodfxEntity {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "FAILUREMODE_ID")
     private List<Cause> causes = new ArrayList<>();
-    
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "FAILUREMODE_ID")
     private List<Effect> effects = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "FAILUREMODE_ID")
+    private List<Action> actions = new ArrayList<>();
 
     public FailureMode() {
 
@@ -58,6 +63,14 @@ public class FailureMode extends PodfxEntity {
 
     public void setEffects(List<Effect> effects) {
         this.effects = effects;
+    }
+
+    public List<Action> getActions() {
+        return actions;
+    }
+
+    public void setActions(List<Action> actions) {
+        this.actions = actions;
     }
 
     @Override
