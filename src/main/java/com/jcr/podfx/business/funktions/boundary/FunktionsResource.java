@@ -56,7 +56,6 @@ public class FunktionsResource {
     @PUT
     @RolesAllowed("update")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public void update(FunktionDetail input) {
         fc.update(input);
     }
