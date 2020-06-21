@@ -5,27 +5,26 @@
  */
 package com.jcr.podfx.business.failureModes.control;
 
-import com.jcr.podfx.business.dfmeas.entity.Dfmea;
-import com.jcr.podfx.business.failureModes.entity.FailureMode;
-import java.util.List;
-import java.util.stream.Stream;
+import com.jcr.podfx.business.failureModes.entity.UpdateDTO;
+import com.jcr.podfx.business.funktions.control.FunktionController;
+import com.jcr.podfx.business.funktions.entity.Funktion;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-
-import com.jcr.podfx.business.funktions.entity.Funktion;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import static java.util.stream.Collectors.groupingBy;
-import javax.ws.rs.NotFoundException;
+import javax.transaction.Transactional;
 
 @ApplicationScoped
 public class FailureModeController {
 
     @Inject
-    EntityManager em;
+    FunktionController fc;
 
-    
+    @Transactional
+    public void update(UpdateDTO input) {
+        Funktion f = fc.findById(input.getId());
+        System.out.print(input);
+        input.applyUpdates(f);
+    }
+
 }
