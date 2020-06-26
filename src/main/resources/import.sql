@@ -92,4 +92,5 @@ ALTER SEQUENCE dfmea_id_seq restart with 100;
 ALTER SEQUENCE factor_id_seq restart with 100;
 ALTER SEQUENCE funktion_id_seq restart with 100;
 ALTER SEQUENCE interface_id_seq restart with 100;
+ALTER SEQUENCE failuremode_id_seq restart with 100;
 ALTER SEQUENCE hibernate_sequence restart with 100;
