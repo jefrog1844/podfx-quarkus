@@ -1,8 +1,8 @@
 package com.jcr.podfx.business.interfaces.control;
 
+import com.jcr.podfx.business.AbstractController;
 import java.util.List;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
@@ -14,10 +14,11 @@ import java.util.Map;
 import java.util.Optional;
 import static java.util.stream.Collectors.groupingBy;
 import java.util.stream.Stream;
+import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.NotFoundException;
 
-@ApplicationScoped
-public class InterfaceController {
+@RequestScoped
+public class InterfaceController extends AbstractController {
 
     @Inject
     EntityManager em;
@@ -64,7 +65,8 @@ public class InterfaceController {
 
     public void save(Factor input, Factor output) {
         Interface i = new Interface(input, output, false);
-        i.persist();
+        i.tenant = tenant;
+        i.persistAndFlush();
     }
 
 }

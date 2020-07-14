@@ -28,7 +28,7 @@ import org.eclipse.microprofile.config.ConfigProvider;
  */
 public class TokenUtils {
 
-    private static final String ISSUER = ConfigProvider.getConfig().getValue("mp.jwt.verify.issuer", String.class);
+    //private static final String ISSUER = ConfigProvider.getConfig().getValue("mp.jwt.verify.issuer", String.class);
     private static final String AUDIENCE = ConfigProvider.getConfig().getValue("com.podfx.jwt.audience", String.class);
     private static final String JTI = ConfigProvider.getConfig().getValue("com.podfx.jwt.jti", String.class);
     private static final String ROLES = ConfigProvider.getConfig().getValue("com.podfx.jwt.claims.groups", String.class);
@@ -62,7 +62,7 @@ public class TokenUtils {
 
     private static JwtClaimsBuilder getClaims(User user, Map<String, Long> timeClaims) {
         JwtClaimsBuilder claims = Jwt.claims();
-        claims.issuer(ISSUER);
+        claims.issuer(user.getTenant());
         claims.audience(AUDIENCE);
         claims.groups(new HashSet<>(Stream.of(ROLES.split(",")).collect(Collectors.toSet())));
         claims.upn(user.getEmail());

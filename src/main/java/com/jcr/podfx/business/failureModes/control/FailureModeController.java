@@ -5,17 +5,16 @@
  */
 package com.jcr.podfx.business.failureModes.control;
 
+import com.jcr.podfx.business.AbstractController;
 import com.jcr.podfx.business.failureModes.entity.UpdateDTO;
 import com.jcr.podfx.business.funktions.control.FunktionController;
 import com.jcr.podfx.business.funktions.entity.Funktion;
-
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
-@ApplicationScoped
-public class FailureModeController {
+@RequestScoped
+public class FailureModeController extends AbstractController {
 
     @Inject
     FunktionController fc;
@@ -23,7 +22,6 @@ public class FailureModeController {
     @Transactional
     public void update(UpdateDTO input) {
         Funktion f = fc.findById(input.getId());
-        System.out.print(input);
         input.applyUpdates(f);
     }
 

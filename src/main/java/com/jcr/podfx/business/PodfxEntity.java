@@ -5,8 +5,15 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import java.util.Date;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Version;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * <p>
@@ -25,6 +32,8 @@ import javax.persistence.GenerationType;
  * @author Stéphane Épardaud
  * @see PanacheEntityBase
  */
+@FilterDef(name = "tenantFilter", parameters = @ParamDef(name="tenant", type = "string"))
+@Filter(name = "tenantFilter", condition = "tenant = :tenant")
 @MappedSuperclass
 public abstract class PodfxEntity extends PanacheEntityBase {
 
@@ -38,6 +47,10 @@ public abstract class PodfxEntity extends PanacheEntityBase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
+   
+
+    public String tenant; 
+    
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + "<" + id + ">";

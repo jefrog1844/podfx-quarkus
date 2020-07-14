@@ -5,14 +5,13 @@
  */
 package com.jcr.podfx.business.funktions.control;
 
-import com.jcr.podfx.business.blocks.entity.Block;
+import com.jcr.podfx.business.AbstractController;
 import com.jcr.podfx.business.dfmeas.entity.Dfmea;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
@@ -20,11 +19,12 @@ import com.jcr.podfx.business.funktions.entity.Funktion;
 import com.jcr.podfx.business.funktions.entity.FunktionDetail;
 import com.jcr.podfx.business.interfaces.entity.Interface;
 import java.util.Optional;
+import javax.enterprise.context.RequestScoped;
 import javax.transaction.Transactional;
 import javax.ws.rs.NotFoundException;
 
-@ApplicationScoped
-public class FunktionController {
+@RequestScoped
+public class FunktionController extends AbstractController {
 
     @Inject
     EntityManager em;
@@ -47,29 +47,30 @@ public class FunktionController {
         //need some way to determine if the function name already exists on an existing function and then not add it
         for (String name : funktions) {
             Funktion f = new Funktion(name);
+            f.tenant = tenant;
             dfmea.getFunktions().add(f);
         }
 
         return funktions.size();
 
     }
-    
-    public List<Funktion> listAll (Long dfmeaId) {
+
+    public List<Funktion> listAll(Long dfmeaId) {
         return Funktion.find("DFMEA_ID", dfmeaId).list();
     }
-    
+
     public Funktion findById(Long funktionId) {
         Optional<Funktion> optional = Funktion.findByIdOptional(funktionId);
         return optional.orElseThrow(() -> new NotFoundException());
     }
-    
+
     @Transactional
     public void update(FunktionDetail input) {
         Funktion f = findById(input.getId());
         f.name = input.getName();
         f.requirement = input.getRequirement();
     }
-    
+
     @Transactional
     public void delete(Long funktionId) {
         Funktion.delete("id", funktionId);

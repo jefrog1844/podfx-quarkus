@@ -38,6 +38,9 @@ public class User implements Serializable {
 
     @Column(nullable = false)
     private String email;
+    
+    @Column(nullable = false)
+    private String tenant;
 
     private String firstName;
     private String lastName;
@@ -95,6 +98,15 @@ public class User implements Serializable {
         this.lastName = lastName;
     }
 
+    public String getTenant() {
+        return tenant;
+    }
+
+    public void setTenant(String tenant) {
+        this.tenant = tenant;
+    }
+
+    
     @Override
     public int hashCode() {
         int hash = 3;
