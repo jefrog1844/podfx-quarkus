@@ -1,9 +1,9 @@
 package com.jcr.podfx.business.factors.control;
 
-import com.jcr.podfx.business.AbstractController;
 import com.jcr.podfx.business.dfmeas.entity.Dfmea;
 import java.util.Optional;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.NotFoundException;
 
@@ -13,11 +13,10 @@ import com.jcr.podfx.business.interfaces.control.InterfaceController;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javax.enterprise.context.RequestScoped;
 import javax.transaction.Transactional;
 
-@RequestScoped
-public class FactorController extends AbstractController {
+@ApplicationScoped
+public class FactorController {
 
     @Inject
     InterfaceController ic;
@@ -37,7 +36,6 @@ public class FactorController extends AbstractController {
     public void save(Long dfmeaId, FactorDetail detail) {
         Dfmea dfmea = Dfmea.findById(dfmeaId);
         Factor output = new Factor(detail.getName(), detail.getCategory());
-        output.tenant = tenant;
         output.setDfmea(dfmea);
 
         List<Factor> factors = Factor.find("DFMEA_ID", dfmeaId).list();
@@ -53,14 +51,15 @@ public class FactorController extends AbstractController {
                 createInterface(output, input);
             }
         }
-
+        
     }
-
+    
     @Transactional
     public void update(FactorDetail input) {
         Factor.update("name =?1,category=?2 where id=?3", input.getName(), input.getCategory(),
                 input.getId());
     }
+    
 
     @Transactional
     public void delete(Long factorId) {
@@ -73,5 +72,4 @@ public class FactorController extends AbstractController {
     private void createInterface(Factor input, Factor output) {
         ic.save(input, output);
     }
-
 }

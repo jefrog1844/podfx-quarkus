@@ -5,7 +5,6 @@
  */
 package com.jcr.podfx.business.dfmeas.control;
 
-import com.jcr.podfx.business.AbstractController;
 import com.jcr.podfx.business.dfmeas.entity.Dfmea;
 import com.jcr.podfx.business.dfmeas.entity.DfmeaDetail;
 import io.quarkus.panache.common.Sort;
@@ -14,12 +13,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
 import javax.ws.rs.NotFoundException;
 
-@RequestScoped
-public class DfmeaController extends AbstractController {
+@ApplicationScoped
+public class DfmeaController {
 
     public List<Dfmea> listAll() {
         return Dfmea.listAll(Sort.by("title"));
@@ -29,7 +28,6 @@ public class DfmeaController extends AbstractController {
     public Dfmea create(DfmeaDetail input) {
         Dfmea dfmea = new Dfmea(input);
         dfmea.originated = LocalDate.now();
-        dfmea.tenant = tenant;
         dfmea.persistAndFlush();
         return dfmea;
     }

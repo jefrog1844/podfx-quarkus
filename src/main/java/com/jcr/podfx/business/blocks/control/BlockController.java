@@ -5,9 +5,9 @@
  */
 package com.jcr.podfx.business.blocks.control;
 
-import com.jcr.podfx.business.AbstractController;
 import java.util.Optional;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.NotFoundException;
 
 import com.jcr.podfx.business.blocks.entity.Block;
@@ -17,11 +17,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.enterprise.context.RequestScoped;
 import javax.transaction.Transactional;
 
-@RequestScoped
-public class BlockController extends AbstractController {
+@ApplicationScoped
+public class BlockController {
 
     public List<Block> listAll(Long dfmeaId) {
         return Block.find("DFMEA_ID", dfmeaId).list();
@@ -38,7 +37,7 @@ public class BlockController extends AbstractController {
         if (input != null) {
             //create new Block
             block = new Block(input.getName(), input.getType());
-            block.tenant = tenant;
+
             //set parent
             updateParent(block, input.getParentId());
 
@@ -56,10 +55,10 @@ public class BlockController extends AbstractController {
         Block block = findById(input.getId());
         block.name = input.getName();
         block.type = input.getType();
-
+        
         //set parent
         updateParent(block, input.getParentId());
-
+        
     }
 
     private void updateParent(Block block, Long parentId) {
@@ -69,8 +68,9 @@ public class BlockController extends AbstractController {
             parent = optional.orElseThrow(() -> new NotFoundException());
         }
         block.setParent(parent);
-    }
-
+     }
+    
+    
     @Transactional
     public void delete(Long blockId) {
         Block.delete("PARENT_BLOCK_ID", blockId);

@@ -104,14 +104,14 @@ public class UpdateDTO {
     public void applyUpdates(Funktion f) {
         this.modes = f.getFailureModes();
         
-        updateMode(FailureMode.ABSENT, absent, f.tenant);
-        updateMode(FailureMode.DECAYED, decay, f.tenant);
-        updateMode(FailureMode.EXCESS, excess, f.tenant);
-        updateMode(FailureMode.INCORRECT, incorrect, f.tenant);
-        updateMode(FailureMode.INTERMITTENT, intermittent, f.tenant);
-        updateMode(FailureMode.PARTIAL, partial, f.tenant);
-        updateMode(FailureMode.TOO_LATE, late, f.tenant);
-        updateMode(FailureMode.TOO_SOON, soon, f.tenant);
+        updateMode(FailureMode.ABSENT, absent);
+        updateMode(FailureMode.DECAYED, decay);
+        updateMode(FailureMode.EXCESS, excess);
+        updateMode(FailureMode.INCORRECT, incorrect);
+        updateMode(FailureMode.INTERMITTENT, intermittent);
+        updateMode(FailureMode.PARTIAL, partial);
+        updateMode(FailureMode.TOO_LATE, late);
+        updateMode(FailureMode.TOO_SOON, soon);
       
     }
     
@@ -119,17 +119,16 @@ public class UpdateDTO {
         this.modes.remove(type);
     }
     
-    private void addMode(String type, String name, String tenant) {
+    private void addMode(String type, String name) {
         FailureMode mode = new FailureMode(name, type);
-        mode.tenant = tenant;
         modes.put(type, mode);
     }
     
-    private void updateMode(String type, String name, String tenant) {
+    private void updateMode(String type, String name) {
         if(name.equals(null) || name.isEmpty()) {
             removeMode(type);
         } else if(!modes.containsKey(id)) {
-            addMode(type, name, tenant);
+            addMode(type, name);
         } else {
             FailureMode mode = modes.get(type);
             mode.name = name;
