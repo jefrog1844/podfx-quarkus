@@ -39,8 +39,14 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String email;
 
+    @Column
     private String firstName;
+    
+    @Column
     private String lastName;
+    
+    @Column
+    private String tenant;
     
     public User() {
 
@@ -93,6 +99,14 @@ public class User implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getTenant() {
+        return tenant;
+    }
+
+    public void setTenant(String tenant) {
+        this.tenant = tenant;
     }
 
     @Override

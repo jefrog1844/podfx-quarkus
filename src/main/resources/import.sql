@@ -1,4 +1,6 @@
-INSERT INTO Auth(id, email, firstName, lastName, password, username) VALUES(1, 'user@podfx.com','pod','fx','123','user');
+INSERT INTO Auth(id, email, firstName, lastName, password, username, tenant) VALUES(1, 'user@podfx.com','pod','fx','123','user','podfx');
+INSERT INTO Auth(id, email, firstName, lastName, password, username, tenant) VALUES(2, 'user@podfx.com','pod','fx','123','user2','podfx2');
+INSERT INTO Auth(id, email, firstName, lastName, password, username, tenant) VALUES(3, 'user@podfx.com','pod','fx','123','user3','podfx');
 INSERT INTO DFMEA(id,number,originated,originator,partnumber,revised,teammembers,title,type) VALUES(1,'FM-0001','01/01/2020','jrogers','TA-1000','01/02/2020','jrogers,crogers,crogers,mrogers','Linkage Weldment','System');
 INSERT INTO DFMEA(id,number,originated,originator,partnumber,revised,teammembers,title,type) VALUES(2,'FM-0002','01/02/2020','crogers','FL-2000','01/03/2020','jrogers,crogers,crogers,mrogers','Flashlight Turbo','System');
 INSERT INTO DFMEA(id,number,originated,originator,partnumber,revised,teammembers,title,type) VALUES(3,'FM-0003','01/03/2020','crogers','MT-3000','01/04/2020','jrogers,crogers,crogers,mrogers','Mouse Trap','System');

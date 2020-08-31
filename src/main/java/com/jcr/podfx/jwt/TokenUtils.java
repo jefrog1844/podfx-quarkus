@@ -69,6 +69,7 @@ public class TokenUtils {
         claims.subject(user.getUsername());
         claims.preferredUserName(user.getFirstName());
         claims.claim("jti", JTI);
+        claims.claim(("tenant"), user.getTenant());
 
         //claims.groups(getRoles());
         long currentTimeInSecs = currentTimeInSecs();
