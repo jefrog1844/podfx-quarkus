@@ -20,10 +20,21 @@ import javax.ws.rs.core.UriInfo;
 import com.jcr.podfx.business.dfmeas.entity.Dfmea;
 import com.jcr.podfx.business.dfmeas.entity.DfmeaDetail;
 
+import org.eclipse.microprofile.openapi.annotations.enums.SecuritySchemeType;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
+import org.eclipse.microprofile.openapi.annotations.security.SecuritySchemes;
+
 import javax.inject.Inject;
 
 @ApplicationScoped
 @Path("/dfmeas")
+@SecuritySchemes(value = {
+    @SecurityScheme(securitySchemeName = "apiKey", 
+                    type = SecuritySchemeType.HTTP,
+                    scheme = "Bearer",
+                    bearerFormat = "JWT")}
+)
 public class DfmeasResource {
     
     @Inject
@@ -31,6 +42,7 @@ public class DfmeasResource {
     
     @GET
     @RolesAllowed("read")
+    @SecurityRequirement(name = "apiKey")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Dfmea> listAll() {
         return dc.listAll();
@@ -38,6 +50,7 @@ public class DfmeasResource {
     
     @POST
     @RolesAllowed("create")
+    @SecurityRequirement(name = "apiKey")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Dfmea create(DfmeaDetail input) {
@@ -47,6 +60,7 @@ public class DfmeasResource {
     @Path("{dfmeaId}")
     @GET
     @RolesAllowed("read")
+    @SecurityRequirement(name = "apiKey")
     @Produces(MediaType.APPLICATION_JSON)
     public Dfmea findById(@PathParam("dfmeaId") Long id) {
         return dc.findById(id);
@@ -55,6 +69,7 @@ public class DfmeasResource {
     @Path("{dfmeaId}")
     @DELETE
     @RolesAllowed("delete")
+    @SecurityRequirement(name = "apiKey")
     @Produces(MediaType.APPLICATION_JSON)
     public void delete(@PathParam("dfmeaId") Long id) {
         dc.delete(id);
@@ -62,6 +77,8 @@ public class DfmeasResource {
     
     @Path("{dfmeaId}")
     @PUT
+    @RolesAllowed("update")
+    @SecurityRequirement(name = "apiKey")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public void update(@PathParam("dfmeaId") Long dfmeaId,
@@ -72,6 +89,7 @@ public class DfmeasResource {
     @GET
     @Path("search")
     @RolesAllowed("read")
+    @SecurityRequirement(name = "apiKey")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Dfmea> search(@Context UriInfo info) {
         String title = info.getQueryParameters().getFirst("title");

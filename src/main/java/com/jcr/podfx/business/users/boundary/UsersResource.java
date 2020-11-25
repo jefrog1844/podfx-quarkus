@@ -18,7 +18,7 @@ import javax.ws.rs.POST;
 public class UsersResource {
 
     @Inject
-    UserController uf;
+    UserController uc;
 
     @POST
     @Path("/signIn")
@@ -26,7 +26,7 @@ public class UsersResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Credentials signIn(JsonObject input) {
-        return uf.signIn(input.getString("username"), input.getString("password"));
+        return uc.signIn(input.getString("username"), input.getString("password"));
     }
 
 }

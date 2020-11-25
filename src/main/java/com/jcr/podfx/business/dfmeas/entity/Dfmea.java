@@ -1,20 +1,18 @@
 package com.jcr.podfx.business.dfmeas.entity;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 import com.jcr.podfx.business.PodfxEntity;
 import com.jcr.podfx.business.funktions.entity.Funktion;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
 
 @Entity
 public class Dfmea extends PodfxEntity {

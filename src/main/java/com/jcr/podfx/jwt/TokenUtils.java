@@ -1,27 +1,22 @@
 package com.jcr.podfx.jwt;
 
-import com.jcr.podfx.business.users.entity.User;
 import java.io.InputStream;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import com.jcr.podfx.business.users.entity.User;
+
+import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.jwt.Claims;
 
 import io.smallrye.jwt.build.Jwt;
 import io.smallrye.jwt.build.JwtClaimsBuilder;
-import java.security.PublicKey;
-import java.security.interfaces.RSAPublicKey;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import org.eclipse.microprofile.config.ConfigProvider;
 
 /**
  * Utilities for generating a JWT for testing
@@ -31,7 +26,7 @@ public class TokenUtils {
     private static final String ISSUER = ConfigProvider.getConfig().getValue("mp.jwt.verify.issuer", String.class);
     private static final String AUDIENCE = ConfigProvider.getConfig().getValue("com.podfx.jwt.audience", String.class);
     private static final String JTI = ConfigProvider.getConfig().getValue("com.podfx.jwt.jti", String.class);
-    private static final String ROLES = ConfigProvider.getConfig().getValue("com.podfx.jwt.claims.groups", String.class);
+    private static final String PRIVATE_KEY = ConfigProvider.getConfig().getValue("mp.jwt.verify.privatekey.location", String.class);
     private static final Integer EXPIRES = ConfigProvider.getConfig().getValue("com.podfx.jwt.expires", Integer.class);
 
     private TokenUtils() {
@@ -50,26 +45,27 @@ public class TokenUtils {
     public static String generateTokenString(User user, Map<String, Long> timeClaims)
             throws Exception {
         // Use the test private key associated with the test public key for a valid signature
-        PrivateKey pk = readPrivateKey("/META-INF/resources/privateKey.pem");
-        String token = generateTokenString(pk, "/META-INF/resources/privateKey.pem", user, timeClaims);
+        PrivateKey pk = readPrivateKey(PRIVATE_KEY);
+        String token = generateTokenString(pk, PRIVATE_KEY, user, timeClaims);
         return token;
     }
 
     public static String generateTokenString(PrivateKey privateKey, String kid,
             User user, Map<String, Long> timeClaims) throws Exception {
-        return getClaims(user, timeClaims).jws().signatureKeyId(kid).sign(privateKey);
+        return getClaims(user, timeClaims).jws().keyId(kid).sign(privateKey);
     }
 
     private static JwtClaimsBuilder getClaims(User user, Map<String, Long> timeClaims) {
         JwtClaimsBuilder claims = Jwt.claims();
         claims.issuer(ISSUER);
         claims.audience(AUDIENCE);
-        claims.groups(new HashSet<>(Stream.of(ROLES.split(",")).collect(Collectors.toSet())));
-        claims.upn(user.getEmail());
-        claims.subject(user.getUsername());
-        claims.preferredUserName(user.getFirstName());
+        //claims.groups(new HashSet<>(Stream.of(ROLES.split(",")).collect(Collectors.toSet())));
+        claims.groups(user.roles.stream().map(r -> r.name).collect(Collectors.toSet()));
+        claims.upn(user.email);
+        claims.subject(user.username);
+        claims.preferredUserName(user.firstName);
         claims.claim("jti", JTI);
-        claims.claim(("tenant"), user.getTenant());
+        claims.claim(("tenant"), user.tenant);
 
         //claims.groups(getRoles());
         long currentTimeInSecs = currentTimeInSecs();
@@ -80,15 +76,6 @@ public class TokenUtils {
         claims.claim(Claims.auth_time.name(), currentTimeInSecs);
         claims.expiresAt(exp);
         return claims;
-    }
-
-    private static Set<String> getRoles() {
-        Set<String> roles = new HashSet<>();
-        roles.add("create");
-        roles.add("read");
-        roles.add("update");
-        roles.add("delete");
-        return roles;
     }
 
     /**

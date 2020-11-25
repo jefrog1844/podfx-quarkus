@@ -5,14 +5,13 @@
  */
 package com.jcr.podfx.business.failureModes.control;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
+
 import com.jcr.podfx.business.failureModes.entity.UpdateDTO;
 import com.jcr.podfx.business.funktions.control.FunktionController;
 import com.jcr.podfx.business.funktions.entity.Funktion;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 
 @ApplicationScoped
 public class FailureModeController {

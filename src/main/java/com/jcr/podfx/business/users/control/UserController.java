@@ -1,29 +1,26 @@
 package com.jcr.podfx.business.users.control;
 
-import com.jcr.podfx.jwt.GenerateToken;
-import com.jcr.podfx.business.users.entity.Credentials;
-import com.jcr.podfx.business.users.entity.User;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.enterprise.context.ApplicationScoped;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.PersistenceContext;
+import javax.ws.rs.NotFoundException;
+
+import com.jcr.podfx.business.users.entity.Credentials;
+import com.jcr.podfx.business.users.entity.User;
+import com.jcr.podfx.jwt.GenerateToken;
 
 @ApplicationScoped
 public class UserController {
 
-    @PersistenceContext
-    EntityManager em;
-
     public Credentials signIn(String username, String password) {
         User user = null;
         if (username != null) {
-            user = em.
-                    createNamedQuery(User.FIND_BY_USERNAME, User.class).
-                    setParameter("username", username).
-                    getSingleResult();
-            if (user == null || password == null || !checkPassword(user.getPassword(), password)) {
+            Optional<User> optional = User.find("username", username).firstResultOptional();
+            user = optional.orElseThrow(() -> new NotFoundException());
+            if (!user.doesPasswordMatch(password)) {
                 throw new EntityNotFoundException("Invalid username or password!");
             }
         } else {
@@ -37,18 +34,8 @@ public class UserController {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        Credentials creds = new Credentials();
-        creds.setUsername(username);
-        creds.setToken(token);
+        Credentials creds = new Credentials(user.getFullName(), token);
         return creds;
-    }
-
-    public User save(User user) {
-        return em.merge(user);
-    }
-
-    private boolean checkPassword(String creds, String user) {
-        return creds.equals(user);
     }
 
 }

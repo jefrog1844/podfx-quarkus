@@ -127,7 +127,7 @@ public class UpdateDTO {
     private void updateMode(String type, String name) {
         if(name.equals(null) || name.isEmpty()) {
             removeMode(type);
-        } else if(!modes.containsKey(id)) {
+        } else if(!modes.containsKey(type)) { //changed key from id to type jdr 11-24
             addMode(type, name);
         } else {
             FailureMode mode = modes.get(type);
