@@ -39,7 +39,7 @@ public class GenerateTokenTest {
         boolean pass = false;
 
         User u = new User();
-        u.setUsername(USERNAME);
+        u.username = USERNAME;
 
         String jwt = GenerateToken.token(u);
         JwtConsumer jwtConsumer = new JwtConsumerBuilder()

@@ -16,15 +16,15 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 public class TestUtil {
 
     @ConfigProperty(name="com.podfx.user.test.username")
-    static String username;
+    static String USERNAME;
     
     @ConfigProperty(name="com.podfx.user.test.password")
-    static String password;
+    static String PASSWORD;
     
     public static String mockToken() throws Exception {
         User u = new User();
-        u.setUsername(username);
-        u.setPassword(password);
+        u.username = USERNAME;
+        u.password = PASSWORD;
         return GenerateToken.token(u);
     }
 }
