@@ -91,7 +91,7 @@ public class DfmeasResource {
     @RolesAllowed("read")
     @SecurityRequirement(name = "apiKey")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Dfmea> search(@Context UriInfo info) {
+    public List<Dfmea> search(@Context UriInfo info	) {
         String title = info.getQueryParameters().getFirst("title");
         return dc.search(title);
     }

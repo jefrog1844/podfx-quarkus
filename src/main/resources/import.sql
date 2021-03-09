@@ -1,6 +1,6 @@
-INSERT INTO Auth(id, email, firstName, lastName, username, password, tenant) VALUES(1, 'user@podfx.com','pod','fx','read-only','podfx','podfx1');
-INSERT INTO Auth(id, email, firstName, lastName, username, password, tenant) VALUES(2, 'user@podfx.com','pod','fx','read-write','podfx','podfx2');
-INSERT INTO Auth(id, email, firstName, lastName, username, password, tenant) VALUES(3, 'user@podfx.com','pod','fx','full-access','podfx','podfx3');
+INSERT INTO Auth(id, email, firstName, lastName, username, password, tenant) VALUES(1, 'user@podfx.com','pod','fx','read.only','readonly','podfx1');
+INSERT INTO Auth(id, email, firstName, lastName, username, password, tenant) VALUES(2, 'user@podfx.com','pod','fx','read.write','readwrite','podfx2');
+INSERT INTO Auth(id, email, firstName, lastName, username, password, tenant) VALUES(3, 'user@podfx.com','pod','fx','full.access','fullaccess','podfx3');
 INSERT INTO Role(id, name) VALUES (1, 'create');
 INSERT INTO Role(id, name) VALUES (2, 'read');
 INSERT INTO Role(id, name) VALUES (3, 'update');

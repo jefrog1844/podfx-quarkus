@@ -5,6 +5,7 @@
  */
 package com.jcr;
 
+import com.jcr.podfx.business.users.entity.Role;
 import com.jcr.podfx.business.users.entity.User;
 import com.jcr.podfx.jwt.GenerateToken;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -23,8 +24,16 @@ public class TestUtil {
     
     public static String mockToken() throws Exception {
         User u = new User();
-        u.setUsername(username);
-        u.setPassword(password);
+        u.username = username;
+        u.password = password;
+        u.firstName = "pod";
+        u.lastName = "fx";
+        u.email = "user@podfx.com";
+        u.tenant = "podfx1";
+        u.roles.add(new Role(Long.valueOf(1),"create"));
+        u.roles.add(new Role(Long.valueOf(2),"read"));
+        u.roles.add(new Role(Long.valueOf(3),"update"));
+        u.roles.add(new Role(Long.valueOf(4),"delete"));
         return GenerateToken.token(u);
     }
 }

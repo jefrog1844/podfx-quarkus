@@ -5,6 +5,7 @@
  */
 package com.jcr;
 
+import com.jcr.podfx.business.users.entity.Role;
 import com.jcr.podfx.business.users.entity.User;
 import com.jcr.podfx.jwt.GenerateToken;
 import com.jcr.podfx.jwt.TokenUtils;
@@ -29,7 +30,7 @@ public class GenerateTokenTest {
     private static final String USERNAME = ConfigProvider.getConfig().getValue("com.podfx.user.test.username", String.class);
     private static final String PUBLIC_KEY = ConfigProvider.getConfig().getValue("mp.jwt.verify.publickey.location", String.class);
     private static final String ISSUER = ConfigProvider.getConfig().getValue("mp.jwt.verify.issuer", String.class);
-    private static final String AUDIENCEE = ConfigProvider.getConfig().getValue("com.podfx.jwt.audience", String.class);
+    private static final String AUDIENCE = ConfigProvider.getConfig().getValue("com.podfx.jwt.audience", String.class);
 
     @Inject
     JsonWebToken jwt;
@@ -39,13 +40,21 @@ public class GenerateTokenTest {
         boolean pass = false;
 
         User u = new User();
-        u.setUsername(USERNAME);
+        u.username = USERNAME;
+        u.firstName = "pod";
+        u.lastName = "fx";
+        u.email = "user@podfx.com";
+        u.tenant = "podfx1";
+        u.roles.add(new Role(Long.valueOf(1),"create"));
+        u.roles.add(new Role(Long.valueOf(2),"read"));
+        u.roles.add(new Role(Long.valueOf(3),"update"));
+        u.roles.add(new Role(Long.valueOf(4),"delete"));
 
         String jwt = GenerateToken.token(u);
         JwtConsumer jwtConsumer = new JwtConsumerBuilder()
                 .setRequireExpirationTime() // the JWT must have an expiration time
                 .setExpectedIssuer(ISSUER) // whom the JWT needs to have been issued by
-                .setExpectedAudience(AUDIENCEE) // to whom the JWT is intended for
+                .setExpectedAudience(AUDIENCE) // to whom the JWT is intended for
                 .setExpectedSubject(USERNAME) // username
                 .setVerificationKey(TokenUtils.readPublicKey(PUBLIC_KEY)) // verify the signature with the public key
                 .build(); // create the JwtConsumer instance

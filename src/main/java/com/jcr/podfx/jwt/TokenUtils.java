@@ -26,7 +26,8 @@ public class TokenUtils {
     private static final String ISSUER = ConfigProvider.getConfig().getValue("mp.jwt.verify.issuer", String.class);
     private static final String AUDIENCE = ConfigProvider.getConfig().getValue("com.podfx.jwt.audience", String.class);
     private static final String JTI = ConfigProvider.getConfig().getValue("com.podfx.jwt.jti", String.class);
-    private static final String PRIVATE_KEY = ConfigProvider.getConfig().getValue("mp.jwt.verify.privatekey.location", String.class);
+    private static final String PRIVATE_KEY = ConfigProvider.getConfig().getValue("mp.jwt.verify.privatekey.location",
+            String.class);
     private static final Integer EXPIRES = ConfigProvider.getConfig().getValue("com.podfx.jwt.expires", Integer.class);
 
     private TokenUtils() {
@@ -35,23 +36,22 @@ public class TokenUtils {
 
     /**
      * Utility method to generate a JWT string from a JSON resource file that is
-     * signed by the privateKey.pem test resource key, possibly with invalid
-     * fields.
+     * signed by the privateKey.pem test resource key, possibly with invalid fields.
      *
      * @param timeClaims - used to return the exp, iat, auth_time claims
      * @return the JWT string
      * @throws Exception on parse failure
      */
-    public static String generateTokenString(User user, Map<String, Long> timeClaims)
-            throws Exception {
-        // Use the test private key associated with the test public key for a valid signature
+    public static String generateTokenString(User user, Map<String, Long> timeClaims) throws Exception {
+        // Use the test private key associated with the test public key for a valid
+        // signature
         PrivateKey pk = readPrivateKey(PRIVATE_KEY);
         String token = generateTokenString(pk, PRIVATE_KEY, user, timeClaims);
         return token;
     }
 
-    public static String generateTokenString(PrivateKey privateKey, String kid,
-            User user, Map<String, Long> timeClaims) throws Exception {
+    public static String generateTokenString(PrivateKey privateKey, String kid, User user, Map<String, Long> timeClaims)
+            throws Exception {
         return getClaims(user, timeClaims).jws().keyId(kid).sign(privateKey);
     }
 
@@ -59,22 +59,23 @@ public class TokenUtils {
         JwtClaimsBuilder claims = Jwt.claims();
         claims.issuer(ISSUER);
         claims.audience(AUDIENCE);
-        //claims.groups(new HashSet<>(Stream.of(ROLES.split(",")).collect(Collectors.toSet())));
+
         claims.groups(user.roles.stream().map(r -> r.name).collect(Collectors.toSet()));
+
         claims.upn(user.email);
         claims.subject(user.username);
         claims.preferredUserName(user.firstName);
         claims.claim("jti", JTI);
         claims.claim(("tenant"), user.tenant);
 
-        //claims.groups(getRoles());
         long currentTimeInSecs = currentTimeInSecs();
-        long exp = timeClaims != null && timeClaims.containsKey(Claims.exp.name())
-                ? timeClaims.get(Claims.exp.name()) : currentTimeInSecs + EXPIRES;
+        long exp = timeClaims != null && timeClaims.containsKey(Claims.exp.name()) ? timeClaims.get(Claims.exp.name())
+                : currentTimeInSecs + EXPIRES;
 
         claims.issuedAt(currentTimeInSecs);
         claims.claim(Claims.auth_time.name(), currentTimeInSecs);
         claims.expiresAt(exp);
+
         return claims;
     }
 
@@ -116,8 +117,7 @@ public class TokenUtils {
 
     public static RSAPublicKey decodePublicKey(final String pemEncoded) throws Exception {
         byte[] encodedBytes = toEncodedBytes(pemEncoded);
-        X509EncodedKeySpec keySpec
-                = new X509EncodedKeySpec(encodedBytes);
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(encodedBytes);
         KeyFactory kf = KeyFactory.getInstance("RSA");
         return (RSAPublicKey) kf.generatePublic(keySpec);
     }

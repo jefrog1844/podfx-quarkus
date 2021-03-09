@@ -7,7 +7,14 @@ import com.jcr.podfx.business.PodfxEntity;
 @Entity
 public class Role extends PodfxEntity {
     public String name;
-    public Role() {}
+
+    public Role() {
+    }
+
+    public Role(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     @Override
     public int hashCode() {
@@ -38,6 +45,5 @@ public class Role extends PodfxEntity {
     public String toString() {
         return "Role [name=" + name + "]";
     }
-    
-    
+
 }

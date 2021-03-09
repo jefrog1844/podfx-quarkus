@@ -34,7 +34,7 @@ public class UserController {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        Credentials creds = new Credentials(user.getFullName(), token);
+        Credentials creds = new Credentials(user.username, token);
         return creds;
     }
 
